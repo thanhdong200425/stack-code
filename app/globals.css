@@ -1,13 +1,6 @@
 :root {
-  --background: #ffffff;
+  --background: #FFFDF2;
   --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 html,
@@ -28,6 +21,7 @@ body {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  font-weight: bold;
 }
 
 a {
