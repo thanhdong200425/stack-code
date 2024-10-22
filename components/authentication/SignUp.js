@@ -1,5 +1,5 @@
 "use client";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormStatus, useActionState } from "react";
 import signUp from "@/app/lib/actions";
 import classes from "./signup.module.css";
 import Link from "next/link";
@@ -7,7 +7,7 @@ import { BiHide, BiShow } from "react-icons/bi";
 import { useState } from "react";
 
 export default function SignUp() {
-    const [formState, dispatch] = useFormState(signUp, {});
+    const [formState, dispatch] = useActionState(signUp, {});
     const [isShowPassword, setIsShowPassword] = useState(false);
 
     function showPasswordFunction() {
