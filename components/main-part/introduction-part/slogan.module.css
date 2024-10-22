@@ -1,0 +1,30 @@
+.container {
+    display: flex;
+    height: inherit;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.text {
+    text-align: center;
+}
+
+.title {
+    font-size: 3.5rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+}
+
+.title span {
+    background-color: orange;
+    padding: 0 0.8rem;
+    border-radius: 0.5rem;
+}
+
+.description {
+    width: 60%;
+    margin: 0 auto;
+    font-weight: 500;
+}

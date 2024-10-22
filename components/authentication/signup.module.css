@@ -1,0 +1,149 @@
+.container {
+    display: flex;
+    overflow: hidden;
+    height: 100vh;
+}
+
+.leftSection {
+    width: 55%;
+    padding: 2.5rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.container h1 {
+    font-size: 24px;
+    margin-bottom: 1rem;
+}
+
+.container .subHeading {
+    font-weight: lighter;
+}
+
+.container a {
+    color: #0070f3;
+    text-decoration: none;
+}
+
+.container a:hover {
+    text-decoration: underline;
+}
+
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.subFormContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+.subFormContainer label,
+.subFormContainer .passwordLabel {
+    color: #aba8a8;
+    font-weight: normal;
+}
+
+.subFormContainer input {
+    padding: 1.1rem;
+    font-size: 1rem;
+    border-radius: 0.6rem;
+    border: 1px solid #ccc;
+}
+
+.subFormContainer .passwordLabel {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.subFormContainer .passwordLabel .iconWithTest {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+}
+
+.subFormContainer .passwordLabel .iconWithTest:hover {
+    cursor: pointer;
+    color: #000;
+}
+
+.licenseLabel {
+    margin: 2rem 0;
+}
+
+.licenseLabelNotification {
+    margin-bottom: 2rem;
+    font-weight: normal;
+}
+
+.licenseLabelNotification span {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.licenseLabel input {
+    transform: scale(1.25);
+}
+
+.licenseLabel input[type="checkbox"]:checked {
+    background-color: #fff;
+    border-color: #000;
+}
+
+.licenseLabel span {
+    padding-left: 10px;
+    font-weight: "500";
+}
+
+.passwordRules {
+    font-size: 12px;
+    color: gray;
+    margin-bottom: 12px;
+}
+
+.errors p {
+    color: red;
+    font-size: 14px;
+}
+
+.container button {
+    width: 40%;
+    padding: 15px 8px;
+    font-size: 1.3rem;
+    color: white;
+    background-color: #c3c3c3;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+}
+
+.container button:hover {
+    background-color: #005bb5;
+}
+
+.disabledButton {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.rightSection {
+    width: 45%;
+    overflow: hidden;
+    height: 100vh;
+}
+
+.rightSection .videoBackground {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

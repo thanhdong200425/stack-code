@@ -1,13 +1,14 @@
 import Logo from "./Logo";
-import icon2 from "../../app/assets/icon-2-removebg-preview.png";
+import icon2 from "@/app/assets/icon-2-removebg-preview.png";
 import classes from "./header.module.css";
+import Link from "next/link";
 
 export default function Header() {
     return (
         <div className={classes.headerBlock}>
             {/*Left header*/}
             <div className={classes.headerBlockLeft}>
-                <Logo url={icon2}/>
+                <Logo url={icon2} />
                 <div className={classes.navigation}>
                     <ul>
                         <a href="#">
@@ -30,9 +31,9 @@ export default function Header() {
                         <li>Follow us</li>
                     </a>
                     <li>
-                        <button className={classes.signInButton}>
+                        <Link href="/sign-up" className={classes.signInButton}>
                             Sign in
-                        </button>
+                        </Link>
                     </li>
                 </ul>
             </div>

@@ -1,12 +1,11 @@
-import {Open_Sans} from "next/font/google"
+import { Open_Sans } from "next/font/google";
 import "./globals.css";
-
 
 const roboto = Open_Sans({
     weight: "400",
-    subsets: ['latin'],
-    display: 'swap',
-})
+    subsets: ["latin"],
+    display: "swap",
+});
 
 export const metadata = {
     title: "Stackcode",

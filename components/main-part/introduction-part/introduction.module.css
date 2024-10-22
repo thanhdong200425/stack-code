@@ -1,0 +1,25 @@
+.container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    z-index: -999;
+}
+
+.square {
+    position: absolute;
+    background-color: orange;
+    animation: moveSquares linear infinite;
+    border-radius: 5px;
+}
+
+@keyframes moveSquares {
+    0% {
+        transform: translateY(0) rotate(0deg);
+    }
+    100% {
+        transform: translateY(-200vh) rotate(360deg);
+    }
+}
