@@ -1,0 +1,31 @@
+.formContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.errors p {
+    color: red;
+    font-size: 14px;
+}
+.licenseLabel {
+    margin: 2rem 0;
+}
+
+.licenseLabel input {
+    transform: scale(1.25);
+}
+
+.licenseLabel input[type="checkbox"]:checked {
+    background-color: #fff;
+    border-color: #000;
+}
+
+.licenseLabel span {
+    padding-left: 10px;
+    font-weight: "500";
+}
+
+.disabledButton {
+    opacity: 0.6;
+    pointer-events: none;
+}
