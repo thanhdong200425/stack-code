@@ -1,3 +1,5 @@
+import SignIn from "@/components/authentication/SignIn";
+
 export default function SignInPage() {
-    return <h1>Sign in page</h1>
+    return <SignIn />;
 }

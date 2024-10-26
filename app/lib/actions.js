@@ -1,13 +1,13 @@
 "use server";
 
 import { PrismaClient } from "@prisma/client";
-import { hash } from "bcryptjs";
+import { hash, compare } from "bcrypt";
 import { redirect } from "next/navigation";
 import { validate } from "@/app/lib/validateDatabase";
 
 const prisma = new PrismaClient();
 
-export default async function signUp(prevState, formData) {
+export async function signUp(prevState, formData) {
     const email = formData.get("email");
     const password = formData.get("password");
     const username = formData.get("username");
@@ -22,12 +22,10 @@ export default async function signUp(prevState, formData) {
     }
 
     let newUser;
-
-    // If no error found
-    const saltRounds = parseInt(process.env.SALT_ROUNDS) || 10;
-    const hashedPassword = await hash(password, saltRounds);
-
     try {
+        // If no error found
+        const saltRounds = parseInt(process.env.SALT_ROUNDS) || 10;
+        const hashedPassword = await hash(password, saltRounds);
         // Create a new user by using prisma
         newUser = await prisma.user.create({
             data: {
@@ -41,6 +39,37 @@ export default async function signUp(prevState, formData) {
         return {
             errors: {
                 server: "There was an error creating your account. Please try again.",
+            },
+        };
+    }
+
+    redirect("/test");
+}
+
+export async function signIn(prevState, formData) {
+    const username = formData.get("username");
+    const password = formData.get("password");
+
+    let currentUser = null;
+
+    try {
+        currentUser = await prisma.user.findFirst({
+            where: {
+                username,
+            },
+        });
+
+        if (!currentUser || !(await compare(password, currentUser.hashedPassword)))
+            return {
+                errors: {
+                    error: "Invalid username or password. Please try again",
+                },
+            };
+    } catch (e) {
+        console.log("Error in signIn function with error: " + e);
+        return {
+            errors: {
+                server: "An error occurred while trying to sign in. Please try again later.",
             },
         };
     }
