@@ -19,7 +19,7 @@ export default function PasswordField({ name }) {
                     {isShowPassword ? "Hide" : "Show"}
                 </p>
             </div>
-            <input type={isShowPassword ? "text" : "password"} name={name} required autoComplete="false" />
+            <input type={isShowPassword ? "text" : "password"} name={name} required autoComplete="false" className="text-black" />
         </div>
     );
 }

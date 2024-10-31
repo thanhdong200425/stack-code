@@ -4,8 +4,9 @@ import { PrismaClient } from "@prisma/client";
 import { hash, compare } from "bcrypt";
 import { redirect } from "next/navigation";
 import { validate } from "@/app/lib/validateDatabase";
-
-const prisma = new PrismaClient();
+import { v4 as uuidv4 } from "uuid";
+import { cookies } from "next/headers";
+import prisma from "@/prisma/prismaClient";
 
 export async function signUp(prevState, formData) {
     const email = formData.get("email");
@@ -43,7 +44,7 @@ export async function signUp(prevState, formData) {
         };
     }
 
-    redirect("/test");
+    redirect("/home");
 }
 
 export async function signIn(prevState, formData) {
@@ -65,6 +66,23 @@ export async function signIn(prevState, formData) {
                     error: "Invalid username or password. Please try again",
                 },
             };
+
+        // If no errors is found, then create a new session
+        const sessionToken = uuidv4();
+        // Add this session token into database
+        const session = await prisma.session.create({
+            data: {
+                userId: currentUser.id,
+                token: sessionToken,
+                expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 10), // This formula set token that only valid in 10 days
+            },
+        });
+
+        // Set cookies for client's web browser
+        const cookieStore = await cookies();
+        cookieStore.set("sessionId", session.token, {
+            expires: session.expiresAt,
+        });
     } catch (e) {
         console.log("Error in signIn function with error: " + e);
         return {
@@ -73,6 +91,5 @@ export async function signIn(prevState, formData) {
             },
         };
     }
-
-    redirect("/test");
+    redirect("/home");
 }

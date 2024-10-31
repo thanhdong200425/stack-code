@@ -14,24 +14,27 @@ datasource db {
 }
 
 model User {
+  @@map("Users")
   id             Int            @id @default(autoincrement())
   username       String         @unique
   hashedPassword String?
   email          String         @unique
   isVerified     Boolean        @default(false)
   createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @default(now())
   sessions       Session[]
   oauthAccounts  OAuthAccount[]
-  passkeys       Passkey[]
 }
 
 model Session {
+  @@map("Sessions")
   id        Int      @id @default(autoincrement())
   user      User     @relation(fields: [userId], references: [id])
   userId    Int
   token     String   @unique
   expiresAt DateTime
   createdAt DateTime @default(now())
+  isEnd     Boolean  @default(false)
 }
 
 model OAuthAccount {
@@ -42,13 +45,4 @@ model OAuthAccount {
   providerUserId String   @unique
   email          String
   createdAt      DateTime @default(now())
-}
-
-model Passkey {
-  id           Int      @id @default(autoincrement())
-  userId       Int
-  user         User     @relation(fields: [userId], references: [id])
-  credentialId String   @unique
-  publicKey    String
-  createdAt    DateTime @default(now())
 }

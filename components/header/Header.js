@@ -31,7 +31,7 @@ export default function Header() {
                         <li>Follow us</li>
                     </a>
                     <li>
-                        <Link href="/sign-up" className={classes.signInButton}>
+                        <Link href="/sign-in" className={classes.signInButton}>
                             Sign in
                         </Link>
                     </li>

@@ -1,6 +1,4 @@
-import {PrismaClient} from "@prisma/client";
-
-const primsa = new PrismaClient();
+import prisma from "@/prisma/prismaClient";
 
 export async function validate(email, password, username) {
     let errors = {};
@@ -22,9 +20,9 @@ export async function validate(email, password, username) {
     }
 
     // If email or username is already in use
-    const isDuplicate = await isDuplicateEmailOrUsername(email, username)
+    const isDuplicate = await isDuplicateEmailOrUsername(email, username);
     if (isDuplicate) {
-        errors.email = "Your email or username was already in use. Try another email!"
+        errors.email = "Your email or username was already in use. Try another email!";
     }
 
     // If there is at least 1 error, return it
@@ -37,14 +35,11 @@ export async function validate(email, password, username) {
 }
 
 export async function isDuplicateEmailOrUsername(email, username) {
-    const result = await primsa.user.findFirst({
+    const result = await prisma.user.findFirst({
         where: {
-            OR: [
-                {email},
-                {username}
-            ]
-        }
-    })
+            OR: [{ email }, { username }],
+        },
+    });
 
-    return result !== null
+    return result !== null;
 }
