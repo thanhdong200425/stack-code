@@ -1,4 +1,4 @@
-import prisma from "@/prisma/prismaClient";
+import supabase from "@/utils/supabase";
 
 export async function validate(email, password, username) {
     let errors = {};
@@ -7,7 +7,6 @@ export async function validate(email, password, username) {
 
     // If email don't have "@"
     if (!email.includes("@")) errors.email = "Please include @ with your email!";
-
     // If the password doesn't have at least 8 character, or one uppercase letter or one number or one special character
     const hasUpperCase = /[A-Z]/.test(password);
     const hasNumber = /[0-9]/.test(password);
@@ -35,11 +34,6 @@ export async function validate(email, password, username) {
 }
 
 export async function isDuplicateEmailOrUsername(email, username) {
-    const result = await prisma.user.findFirst({
-        where: {
-            OR: [{ email }, { username }],
-        },
-    });
-
-    return result !== null;
+    const { data, error } = supabase.from("Users").select("id").or(`email.eq.${email},username.eq.${username}`).single();
+    return !!data;
 }
