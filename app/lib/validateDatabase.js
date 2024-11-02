@@ -21,7 +21,7 @@ export async function validate(email, password, username) {
     // If email or username is already in use
     const isDuplicate = await isDuplicateEmailOrUsername(email, username);
     if (isDuplicate) {
-        errors.email = "Your email or username was already in use. Try another email!";
+        errors.email = "Your email or username was already in use. Try another email or username!";
     }
 
     // If there is at least 1 error, return it
@@ -34,6 +34,6 @@ export async function validate(email, password, username) {
 }
 
 export async function isDuplicateEmailOrUsername(email, username) {
-    const { data, error } = supabase.from("Users").select("id").or(`email.eq.${email},username.eq.${username}`).single();
-    return !!data;
+    const { data, error } = await supabase.from("Users").select("*").or(`email.eq.${email},username.eq.${username}`).limit(1);
+    return data.length !== 0;
 }
