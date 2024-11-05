@@ -1,3 +1,9 @@
+import Main from "@/components/mainLayoutComponents/mainPart/Main";
+
 export default function Page() {
-    return <h1>This is the home page</h1>;
+    return (
+        <div className="w-[60%]">
+            <Main />
+        </div>
+    );
 }

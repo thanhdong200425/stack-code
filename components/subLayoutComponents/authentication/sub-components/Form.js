@@ -4,10 +4,10 @@ import PasswordField from "./Password";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import classes from "./form.module.css";
-import DividerWithText from "@/components/divider/DividerWithText";
 import Image from "next/image";
 import InputField from "./Input";
 import Link from "next/link";
+import DividerWithText from "@/components/subLayoutComponents/divider/DividerWithText";
 
 export default function FormContainer({ inputFields = null, children, isHaveLicense = true, isSignIn = false, formAction }) {
     const [formState, dispatch] = useActionState(formAction, {});
