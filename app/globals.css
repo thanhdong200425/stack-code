@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-    --background: #fffdf2;
+    --background: #fff;
     --foreground: #171717;
     --header-height: 4rem;
 }
