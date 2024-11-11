@@ -45,7 +45,7 @@ export default function ThoughtInput() {
             <div className="max-w-[45rem] flex justify-center items-center">
                 {buttons.map((button, index) => {
                     return (
-                        <div key={index} className="p-[0.6rem] w-1/2 flex justify-center gap-1 hover:bg-slate-300 rounded-md hover:cursor-pointer">
+                        <div key={index} className="p-[0.6rem] w-1/2 flex justify-center gap-1 hover:bg-slate-300 rounded-md hover:cursor-pointer" onClick={showModal}>
                             <Image src={button.path} alt={button.alt} width={button.width} height={button.height} />
                             <button>{button.title}</button>
                         </div>

@@ -94,7 +94,7 @@ export default function ModalInput({ onClose }) {
                     </button>
                     <button disabled={inputValue.length < 8} className={`px-4 py-2 relative inline-block text-white rounded group ${inputValue.length < 8 ? "bg-blue-300 hover:cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`}>
                         Post
-                        {inputValue.length < 8 && <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Please add more than 8 characters to post</div>}
+                        {inputValue.length < 8 && <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Please add more than 8 characters to create a post</div>}
                     </button>
                 </div>
             </div>
