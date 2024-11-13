@@ -4,12 +4,24 @@ import HeaderLogo from "@/components/mainLayoutComponents/header/Logo";
 import HeaderIcon from "@/components/mainLayoutComponents/header/Icon";
 import IconContainer from "@/components/mainLayoutComponents/header/IconContainer";
 import SearchBar from "@/components/mainLayoutComponents/header/SearchBar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Avatar from "@/components/mainLayoutComponents/header/Avatar";
 import AddQuestionButton from "@/components/mainLayoutComponents/header/AddQuestionButton";
+import { fetchImage } from "@/app/lib/actions";
 
 export default function Header() {
     const [isFocused, setIsFocused] = useState(false);
+    const [avatar, setAvatar] = useState("/icons/avatar-mockup.jpg");
+
+    useEffect(() => {
+        const getImage = async () => {
+            const result = await fetchImage();
+            setAvatar(result);
+        };
+
+        getImage();
+    }, []);
+
     return (
         <header className="bg-white border-b shadow-md fixed w-full z-50 mb-5">
             <div className={`overlay ${isFocused ? "visible" : "invisible"}`} />
@@ -29,7 +41,7 @@ export default function Header() {
                     <SearchBar name="search-bar" placeholder="Search Stackcode" setIsFocused={setIsFocused} />
 
                     {/*Avatar part*/}
-                    <Avatar src={"/icons/avatar-mockup.jpg"} />
+                    <Avatar src={avatar} />
 
                     {/*Add question button*/}
                     <AddQuestionButton />

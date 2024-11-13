@@ -8,6 +8,7 @@ import { cookies } from "next/headers";
 import { validate } from "@/app/lib/validateDatabase";
 import supabase from "@/utils/supabase";
 import { fetchData, insertAndReturnData } from "./utilsDatabase";
+import { data } from "autoprefixer";
 
 export async function signUp(prevState, formData) {
     const email = formData.get("email");
@@ -39,6 +40,7 @@ export async function signIn(prevState, formData) {
 
         const currentUser = await fetchData({
             tableName: "Users",
+            columns: [],
             data: {
                 username,
             },
@@ -51,7 +53,6 @@ export async function signIn(prevState, formData) {
 
         //Compare the plain password with the hashed password stored in the database
         const compareHashedPassword = await compare(password, currentUser.hashedPassword);
-        console.log(compareHashedPassword);
         if (!compareHashedPassword) {
             return { errors: { error: "Invalid username or password. Please try again" } };
         }
@@ -80,4 +81,21 @@ export async function signIn(prevState, formData) {
     }
 
     redirect("/home");
+}
+
+export async function fetchImage() {
+    // Get sessionId from cookie first
+    const cookieStore = await cookies();
+    const sessionId = cookieStore.get("sessionId").value;
+
+    // Get image by retrieve userId from sessionId
+    const { data, error } = await supabase.from("Sessions").select("Users:userId (Info_Users (avatar_link))").match({ token: sessionId }).single();
+
+    // If there is any error, log them out
+    if (error) {
+        throw new Error("Error in fetchImage: " + error);
+    }
+
+    // If there isn't error, then return avatar
+    return data.Users.Info_Users.avatar_link;
 }
