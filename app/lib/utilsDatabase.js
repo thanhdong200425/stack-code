@@ -1,4 +1,6 @@
 import supabase from "@/utils/supabase";
+import { cookies } from "next/headers";
+import { v4 as uuidv4 } from "uuid";
 
 export async function fetchData({ tableName, columns = [], data = {}, isObject = false }) {
     const { data: result, error } = isObject
@@ -35,4 +37,38 @@ export async function insertAndReturnData({ tableName, data = [] }) {
     }
 
     return result;
+}
+
+export async function getUserId() {
+    const cookieStorage = await cookies();
+    const sessionId = cookieStorage.get("sessionId").value.trim();
+
+    if (!sessionId) throw new Error("No sessionId");
+
+    const { data: result, error } = await supabase.from("Sessions").select("userId").match({
+        token: sessionId,
+    });
+
+    if (error) throw new Error(error);
+
+    return result[0].userId;
+}
+
+export async function addResourceToStorage({ file }) {
+    let userId;
+
+    try {
+        userId = await getUserId();
+    } catch (error) {
+        throw error;
+    }
+
+    const { data, error } = await supabase.storage.from("post-image-bucket").upload(userId + "/" + uuidv4(), file);
+
+    if (error) {
+        console.log(error);
+        throw error;
+    }
+
+    return data.fullPath;
 }

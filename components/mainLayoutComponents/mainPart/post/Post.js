@@ -2,8 +2,10 @@ import AvatarInfo from "./AvatarInfo";
 import AvatarPost from "./AvatarPost";
 import Content from "./Content";
 import InteractiveButton from "./InteractiveButton";
+import supabase from "@/utils/supabase";
 
-export default function Post({ title, content, authorName, avatarSrc }) {
+export default async function Post({ title, content, authorName, avatarSrc, postImageSrc }) {
+    const { data } = supabase.storage.from("post-image-bucket").getPublicUrl(postImageSrc);
     return (
         // Container
         <div className="border rounded-2xl p-2 my-5">
@@ -14,7 +16,7 @@ export default function Post({ title, content, authorName, avatarSrc }) {
             </div>
 
             {/* Main content part */}
-            <Content heading={title} content={content} imageSrc={"https://picsum.photos/seed/picsum/200"} imageAlt={"Lorem piscum"} imageWidth={1000} imageHeight={100} />
+            <Content heading={title} content={content} imageSrc={data.publicUrl} imageAlt={"Lorem piscum"} imageWidth={1000} imageHeight={100} />
 
             {/* Interactive buttons part */}
             <div className="flex gap-4">

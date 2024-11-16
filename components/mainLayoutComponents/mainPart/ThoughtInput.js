@@ -1,11 +1,22 @@
 "use client";
 import Image from "next/image";
 import AvatarPost from "./post/AvatarPost";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ModalInput from "./ModalInput";
+import { fetchImage } from "@/app/lib/actions";
 
 export default function ThoughtInput() {
     const [isShowModal, setIsShowModal] = useState(false);
+    const [avatar, setAvatar] = useState("/icons/avatar-man.svg");
+
+    useEffect(() => {
+        const getImage = async () => {
+            const result = await fetchImage();
+            setAvatar(result);
+        };
+
+        getImage();
+    }, []);
 
     const showModal = () => {
         setIsShowModal(true);
@@ -34,11 +45,11 @@ export default function ThoughtInput() {
 
     return (
         <div className="border rounded-2xl">
-            {isShowModal && <ModalInput onClose={hideModal} />}
+            {isShowModal && <ModalInput onClose={hideModal} avatar={avatar} />}
 
             {/* Input field */}
             <div className="bg-white p-2 max-w-[45rem] flex items-center rounded-2xl">
-                <AvatarPost src={"/icons/avatar-man.svg"} alt={"Avatar man"} width={30} height={30} />
+                <AvatarPost src={avatar} alt={"Avatar man"} width={30} height={30} />
                 <input className="w-full mx-5 rounded-2xl bg-gray-50 px-4 py-2 focus:border-none focus:outline-none" placeholder="What do you want to ask or answer?" onClick={showModal} />
             </div>
             {/* Input buttons */}
