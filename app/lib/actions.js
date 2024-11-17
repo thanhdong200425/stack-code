@@ -1,14 +1,13 @@
 "use server";
 
-import {hash, compare} from "bcrypt";
-import {v4 as uuidv4} from "uuid";
-import {redirect} from "next/navigation";
-import {cookies} from "next/headers";
+import { hash, compare } from "bcrypt";
+import { v4 as uuidv4 } from "uuid";
+import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
-import {validate} from "@/app/lib/validateDatabase";
+import { validate } from "@/app/lib/validateDatabase";
 import supabase from "@/utils/supabase";
-import {addResourceToStorage, getUserId, insertAndReturnData} from "./utilsDatabase";
-import {data} from "autoprefixer";
+import { insertAndReturnData } from "./utilsDatabase";
 
 export async function signUp(prevState, formData) {
     const email = formData.get("email");
@@ -17,17 +16,17 @@ export async function signUp(prevState, formData) {
 
     const validateResult = await validate(email, password, username);
     if (Object.keys(validateResult).length > 0) {
-        return {errors: validateResult};
+        return { errors: validateResult };
     }
 
     const saltRounds = parseInt(process.env.SALT_ROUNDS);
     const hashedPassword = await hash(password, saltRounds);
 
-    const {data, error} = await supabase.from("Users").insert([{username, email, hashedPassword}]).single();
+    const { data, error } = await supabase.from("Users").insert([{ username, email, hashedPassword }]).single();
 
     if (error) {
         console.log("Error creating user:", error);
-        return {errors: {server: "There was an error creating your account. Please try again."}};
+        return { errors: { server: "There was an error creating your account. Please try again." } };
     }
 
     redirect("/home");
@@ -38,7 +37,7 @@ export async function signIn(prevState, formData) {
         const username = formData.get("username");
         const password = formData.get("password").trim();
 
-        const {data: currentUser, error} = await supabase
+        const { data: currentUser, error } = await supabase
             .from("Users")
             .select("*")
             .match({
@@ -47,13 +46,13 @@ export async function signIn(prevState, formData) {
             .single();
 
         if (!currentUser) {
-            return {errors: {error: "Invalid username or password. Please try again"}};
+            return { errors: { error: "Invalid username or password. Please try again" } };
         }
 
         //Compare the plain password with the hashed password stored in the database
         const compareHashedPassword = await compare(password, currentUser.hashedPassword);
         if (!compareHashedPassword) {
-            return {errors: {error: "Invalid username or password. Please try again"}};
+            return { errors: { error: "Invalid username or password. Please try again" } };
         }
 
         const sessionToken = uuidv4();
@@ -69,7 +68,7 @@ export async function signIn(prevState, formData) {
         });
 
         const cookieStore = await cookies();
-        cookieStore.set("sessionId", session[0].token, {expires: new Date(session[0].expiresAt)});
+        cookieStore.set("sessionId", session[0].token, { expires: new Date(session[0].expiresAt) });
     } catch (error) {
         console.error("Error in signIn function: " + error);
         return {
@@ -88,10 +87,7 @@ export async function fetchImage() {
     const sessionId = cookieStore.get("sessionId").value;
 
     // Get image by retrieve userId from sessionId
-    const {
-        data,
-        error
-    } = await supabase.from("Sessions").select("Users:userId (Info_Users (avatar_link))").match({token: sessionId}).single();
+    const { data, error } = await supabase.from("Sessions").select("Users:userId (Info_Users (avatar_link))").match({ token: sessionId }).single();
 
     // If there is any error, log them out
     if (error) {
@@ -100,43 +96,4 @@ export async function fetchImage() {
 
     // If there isn't error, then return avatar
     return data.Users.Info_Users.avatar_link;
-}
-
-export async function addPost(prevState, formData) {
-    const titlePost = formData.get("title");
-    const bodyPost = formData.get("body");
-    const imagePost = formData.get("image");
-
-    try {
-        // Firstly, upload image to storage
-        let uploadPath = await addResourceToStorage({
-            file: imagePost,
-        });
-
-        uploadPath = uploadPath.split("/").slice(1).join("/");
-
-
-        // Secondly, get the image link and insert a new record with title and body to database
-        // Get the author id
-        let authorId = await getUserId();
-
-        const {data: newPost, error} = await supabase.from("Posts").insert({
-            title: titlePost,
-            content: bodyPost,
-            image: uploadPath,
-            author_id: authorId,
-        }).select();
-
-        // Finally, return it
-        return {
-            status: true
-        }
-    } catch (error) {
-        console.log("Error in addPost:" + error);
-        return {
-            errors: {
-                error,
-            },
-        };
-    }
 }

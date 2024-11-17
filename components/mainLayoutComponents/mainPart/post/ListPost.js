@@ -1,5 +1,6 @@
 import { fetchData } from "@/app/lib/utilsDatabase";
 import Post from "./Post";
+import { formatDistanceToNow } from "date-fns";
 
 export default async function ListPost() {
     const allPosts = await fetchData({
@@ -11,7 +12,9 @@ export default async function ListPost() {
     return (
         <div>
             {allPosts.map((post, index) => {
-                return <Post key={index} title={post.title} content={post.content} authorName={post.Users.username} avatarSrc={post.Users.Info_Users.avatar_link} postImageSrc={post.image} />;
+                const timePost = formatDistanceToNow(post.created_at, { addSuffix: true });
+
+                return <Post key={index} postId={post.id} title={post.title} content={post.content} authorName={post.Users.username} avatarSrc={post.Users.Info_Users.avatar_link} postImageSrc={post.image} timePost={timePost} authorId={post.author_id} />;
             })}
         </div>
     );

@@ -3,10 +3,10 @@ import { useActionState } from "react";
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import AvatarPost from "./post/AvatarPost";
-import { addPost } from "@/app/lib/actions";
+import { addPost } from "@/app/lib/postActions";
 
 export default function ModalInput({ onClose, avatar }) {
-    const [formState, dispatchFunction] = useActionState(addPost, {});
+    const [formState, dispatchFunction, isPending] = useActionState(addPost, {});
 
     const [showPrivacy, setShowPrivacy] = useState(false); // Track the visibility of privacy dropdown
     const [titleInputValue, setTitleInputValue] = useState("");
@@ -156,7 +156,43 @@ export default function ModalInput({ onClose, avatar }) {
                         Cancel
                     </button>
                     <button disabled={bodyInputValue.length < 8 && titleInputValue.length < 4} className={`px-4 py-2 relative inline-block text-white rounded group ${bodyInputValue.length < 8 ? "bg-blue-300 hover:cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`}>
-                        Post
+                        {isPending ? (
+                            <div className="flex items-center gap-1">
+                                <span>Posting</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                    <circle cx="4" cy="12" r="0" fill="currentColor">
+                                        <animate fill="freeze" attributeName="r" begin="0;svgSpinners3DotsMove1.end" calcMode="spline" dur="0.5s" keySplines=".36,.6,.31,1" values="0;3" />
+                                        <animate fill="freeze" attributeName="cx" begin="svgSpinners3DotsMove7.end" calcMode="spline" dur="0.5s" keySplines=".36,.6,.31,1" values="4;12" />
+                                        <animate fill="freeze" attributeName="cx" begin="svgSpinners3DotsMove5.end" calcMode="spline" dur="0.5s" keySplines=".36,.6,.31,1" values="12;20" />
+                                        <animate id="svgSpinners3DotsMove0" fill="freeze" attributeName="r" begin="svgSpinners3DotsMove3.end" calcMode="spline" dur="0.5s" keySplines=".36,.6,.31,1" values="3;0" />
+                                        <animate id="svgSpinners3DotsMove1" fill="freeze" attributeName="cx" begin="svgSpinners3DotsMove0.end" dur="0.001s" values="20;4" />
+                                    </circle>
+                                    <circle cx="4" cy="12" r="3" fill="currentColor">
+                                        <animate fill="freeze" attributeName="cx" begin="0;svgSpinners3DotsMove1.end" calcMode="spline" dur="0.5s" keySplines=".36,.6,.31,1" values="4;12" />
+                                        <animate fill="freeze" attributeName="cx" begin="svgSpinners3DotsMove7.end" calcMode="spline" dur="0.5s" keySplines=".36,.6,.31,1" values="12;20" />
+                                        <animate id="svgSpinners3DotsMove2" fill="freeze" attributeName="r" begin="svgSpinners3DotsMove5.end" calcMode="spline" dur="0.5s" keySplines=".36,.6,.31,1" values="3;0" />
+                                        <animate id="svgSpinners3DotsMove3" fill="freeze" attributeName="cx" begin="svgSpinners3DotsMove2.end" dur="0.001s" values="20;4" />
+                                        <animate fill="freeze" attributeName="r" begin="svgSpinners3DotsMove3.end" calcMode="spline" dur="0.5s" keySplines=".36,.6,.31,1" values="0;3" />
+                                    </circle>
+                                    <circle cx="12" cy="12" r="3" fill="currentColor">
+                                        <animate fill="freeze" attributeName="cx" begin="0;svgSpinners3DotsMove1.end" calcMode="spline" dur="0.5s" keySplines=".36,.6,.31,1" values="12;20" />
+                                        <animate id="svgSpinners3DotsMove4" fill="freeze" attributeName="r" begin="svgSpinners3DotsMove7.end" calcMode="spline" dur="0.5s" keySplines=".36,.6,.31,1" values="3;0" />
+                                        <animate id="svgSpinners3DotsMove5" fill="freeze" attributeName="cx" begin="svgSpinners3DotsMove4.end" dur="0.001s" values="20;4" />
+                                        <animate fill="freeze" attributeName="r" begin="svgSpinners3DotsMove5.end" calcMode="spline" dur="0.5s" keySplines=".36,.6,.31,1" values="0;3" />
+                                        <animate fill="freeze" attributeName="cx" begin="svgSpinners3DotsMove3.end" calcMode="spline" dur="0.5s" keySplines=".36,.6,.31,1" values="4;12" />
+                                    </circle>
+                                    <circle cx="20" cy="12" r="3" fill="currentColor">
+                                        <animate id="svgSpinners3DotsMove6" fill="freeze" attributeName="r" begin="0;svgSpinners3DotsMove1.end" calcMode="spline" dur="0.5s" keySplines=".36,.6,.31,1" values="3;0" />
+                                        <animate id="svgSpinners3DotsMove7" fill="freeze" attributeName="cx" begin="svgSpinners3DotsMove6.end" dur="0.001s" values="20;4" />
+                                        <animate fill="freeze" attributeName="r" begin="svgSpinners3DotsMove7.end" calcMode="spline" dur="0.5s" keySplines=".36,.6,.31,1" values="0;3" />
+                                        <animate fill="freeze" attributeName="cx" begin="svgSpinners3DotsMove5.end" calcMode="spline" dur="0.5s" keySplines=".36,.6,.31,1" values="4;12" />
+                                        <animate fill="freeze" attributeName="cx" begin="svgSpinners3DotsMove3.end" calcMode="spline" dur="0.5s" keySplines=".36,.6,.31,1" values="12;20" />
+                                    </circle>
+                                </svg>
+                            </div>
+                        ) : (
+                            "Post"
+                        )}
                         {bodyInputValue.length < 8 && titleInputValue.length < 4 && <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Please enter some characters in title and body to create a post</div>}
                     </button>
                 </div>
