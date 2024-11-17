@@ -2,11 +2,11 @@
 
 This project is built using the following technologies:
 
--   [Next.js](https://nextjs.org) - A React framework for production.
--   [React](https://reactjs.org) - A JavaScript library for building user interfaces.
--   [Node.js](https://nodejs.org) - A JavaScript runtime built on Chrome's V8 JavaScript engine.
--   [Vercel](https://vercel.com) - A platform for frontend frameworks and static sites, built to integrate with your headless content, commerce, or database.
--   [Supabase](https://supabase.com) - An open-source Firebase alternative.
+-   [![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org)
+-   [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org)
+-   [![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org)
+-   [![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com)
+-   [![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com)
 
 ## 💻 How to Use Locally
 
