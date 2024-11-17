@@ -6,6 +6,7 @@ This project is built using the following technologies:
 -   [React](https://reactjs.org) - A JavaScript library for building user interfaces.
 -   [Node.js](https://nodejs.org) - A JavaScript runtime built on Chrome's V8 JavaScript engine.
 -   [Vercel](https://vercel.com) - A platform for frontend frameworks and static sites, built to integrate with your headless content, commerce, or database.
+-   [Supabase](https://supabase.com) - An open-source Firebase alternative.
 
 ## 💻 How to Use Locally
 
@@ -61,6 +62,7 @@ To learn more about Next.js, take a look at the following resources:
 
 -   [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 -   [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+-   [Supabase Documentation](https://supabase.com/docs) - learn about Supabase features and API.
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
