@@ -2,6 +2,7 @@
 
 import supabase from "@/utils/supabase";
 import { addResourceToStorage, getUserId } from "./utilsDatabase";
+import { getLocalTime } from "./dateTime";
 
 export async function addPost(prevState, formData) {
     const titlePost = formData.get("title");
@@ -93,6 +94,68 @@ export async function removePost(postId) {
         return responsePost;
     } catch (error) {
         console.log(`Error in removePost: ${error}`);
+        throw error;
+    }
+}
+
+export async function updatePost(prevState, formData) {
+    const id = formData.get("postId");
+    const newTitle = formData.get("title");
+    const newBody = formData.get("body");
+    const newImage = formData.get("image");
+
+    // Handle when a new image was updated
+    let imagePath = null;
+    if (newImage.size > 0) {
+        imagePath = await updateImage(newImage, id);
+    }
+
+    // Get currentTime
+    const localTimeUpdate = getLocalTime();
+
+    let dataToUpdate = {
+        id,
+        ...(newTitle ? { title: newTitle } : {}),
+        ...(newBody ? { content: newBody } : {}),
+        ...(newImage.size > 0 && newImage.name !== "undefined" ? { image: imagePath } : {}),
+        updated_at: localTimeUpdate,
+    };
+
+    // Update new data
+    try {
+        const { error } = await supabase.from("Posts").update(dataToUpdate).eq("id", id);
+
+        if (error) {
+            errors: {
+                error;
+            }
+        }
+
+        return {
+            status: true,
+            text: "OK",
+        };
+    } catch (e) {
+        console.log("Error in updatePost: " + e);
+    }
+}
+
+export async function updateImage(newImage, postId) {
+    try {
+        // Remove the old image in the storage
+        const { data: oldImagePath, error: oldImagePathError } = await supabase.from("Posts").select("image").eq("id", postId).single();
+
+        if (oldImagePath.image) {
+            const { data: oldImage, error: oldImageError } = await supabase.storage.from("post-image-bucket").remove(oldImagePath.image);
+            if (oldImageError) throw new Error("Error in updateImage2: " + oldImageError);
+        }
+
+        // Upload the new image into the storage
+        let newImagePath = await addResourceToStorage({ file: newImage });
+
+        return newImagePath.split("/").slice(1).join("/");
+    } catch (error) {
+        console.log(`Error in updateImage: ${error}`);
         throw error;
     }
 }

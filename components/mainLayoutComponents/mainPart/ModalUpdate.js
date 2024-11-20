@@ -1,22 +1,27 @@
 "use client";
-import { useState, useRef, useEffect, useActionState } from "react";
+
 import Image from "next/image";
 import AvatarPost from "./post/AvatarPost";
-import { addPost } from "@/app/lib/postActions";
+import { privacyOptions } from "./ModalInput";
 
-export default function ModalInput({ onClose, avatar }) {
-    const [formState, dispatchFunction, isPending] = useActionState(addPost, {});
+import { useState, useRef, useEffect, useActionState, useContext } from "react";
+import { updatePost } from "@/app/lib/postActions";
+import { UserContext } from "@/components/mainLayoutComponents/context/LayoutContext";
+import supabase from "@/utils/supabase";
 
-    const [showPrivacy, setShowPrivacy] = useState(false); // Track the visibility of privacy dropdown
+export default function ModalUpdate({ onClose, postId }) {
+    const [formState, dispatchFunction, isPending] = useActionState(updatePost, {});
+    const avatar = useContext(UserContext);
+
+    const [showPrivacy, setShowPrivacy] = useState(false);
     const [titleInputValue, setTitleInputValue] = useState("");
     const [bodyInputValue, setBodyInputValue] = useState("");
+    const [uploadedImage, setUploadedImage] = useState(null);
     const [selectedPrivacy, setSelectedPrivacy] = useState({
         title: "Public",
         icon: "/icons/public-icon.svg",
     });
-    const [uploadedImage, setUploadedImage] = useState(null); // State to store the uploaded image
-    const dropdownRef = useRef(null); // Reference to dropdown privacy part to track the operation of it like click, ...
-    const fileInputRef = useRef(null); // Reference to file input tag
+    const [isModified, setIsModified] = useState(false);
 
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
@@ -24,15 +29,31 @@ export default function ModalInput({ onClose, avatar }) {
     }, []);
 
     useEffect(() => {
+        const fetchPost = async () => {
+            try {
+                const { data: post, error } = await supabase.from("Posts").select("*").match({ id: postId }).single();
+                const imageSrc = supabase.storage.from("post-image-bucket").getPublicUrl(post.image);
+                setTitleInputValue(post.title);
+                setBodyInputValue(post.content);
+                setUploadedImage(imageSrc.data.publicUrl);
+            } catch (error) {
+                console.log("Error in ModalUpdate component: " + error);
+            }
+        };
+
+        fetchPost();
+    }, [postId]);
+
+    useEffect(() => {
+        setIsModified(true);
+    }, [titleInputValue, bodyInputValue, uploadedImage]);
+
+    useEffect(() => {
         if (formState?.status === true) onClose();
     }, [formState.status, onClose]);
 
-    // Function to handle clicks outside the dropdown
-    const handleClickOutside = (event) => {
-        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-            setShowPrivacy(false);
-        }
-    };
+    const dropdownRef = useRef(null);
+    const fileInputRef = useRef(null);
 
     const changeTitleInputValue = (event) => {
         setTitleInputValue(event.target.value);
@@ -53,13 +74,18 @@ export default function ModalInput({ onClose, avatar }) {
         }
     };
 
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setShowPrivacy(false);
+        }
+    };
+
     return (
-        // Modal container
         <div className="fixed inset-0 bg-black bg-opacity-50 flex p-10 justify-center items-center z-50">
             <form action={dispatchFunction} className="relative bg-white w-[600px] rounded-lg shadow-lg">
                 {/* Modal header */}
                 <div className="py-3 px-4 border-b flex justify-between items-center">
-                    <h3 className="text-xl font-semibold">Create a question</h3>
+                    <h3 className="text-xl font-semibold">Update post</h3>
                     <button onClick={onClose} className="text-gray-500 hover:text-gray-700 text-2xl font-bold">
                         ×
                     </button>
@@ -118,19 +144,16 @@ export default function ModalInput({ onClose, avatar }) {
 
                     {/* Input part */}
                     <div className="flex flex-col gap-2 mb-2">
-                        <label htmlFor="title">
-                            Title <span className="text-red-600 font-normal">*</span>
-                        </label>
-                        <input type="text" id="title" name="title" className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g. What is the most popular language?" required onChange={changeTitleInputValue} />
+                        <label htmlFor="title">Title</label>
+                        <input type="text" id="title" name="title" className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g. What is the most popular language?" required value={titleInputValue} onChange={changeTitleInputValue} />
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <label htmlFor="body">
-                            Body <span className="text-red-600 font-normal">*</span>
-                        </label>
+                        <label htmlFor="body">Body</label>
                         <textarea className="w-full h-32 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="body" placeholder="What do you want to ask or answer?" value={bodyInputValue} onChange={changeBodyInputValue} id="body" required />
 
                         <input type="file" accept="image/*" className="opacity-0  cursor-pointer hidden" onChange={handleImageUpload} ref={fileInputRef} name="image" />
+                        <input type="hidden" name="postId" value={postId} />
                         <Image src="/icons/upload-icon.svg" alt="Upload" width={20} height={20} className="cursor-pointer ml-2" onClick={() => fileInputRef.current.click()} />
 
                         {uploadedImage && (
@@ -154,7 +177,7 @@ export default function ModalInput({ onClose, avatar }) {
                     <button onClick={onClose} className="mr-2 px-4 py-2 text-gray-600 hover:bg-gray-100 rounded">
                         Cancel
                     </button>
-                    <button disabled={bodyInputValue.length < 8 && titleInputValue.length < 4} className={`px-4 py-2 relative inline-block text-white rounded group ${bodyInputValue.length < 8 ? "bg-blue-300 hover:cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`}>
+                    <button disabled={!isModified} className={`px-4 py-2 relative inline-block text-white rounded group ${!isModified ? "bg-blue-300 hover:cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`}>
                         {isPending ? (
                             <div className="flex items-center gap-1">
                                 <span>Posting</span>
@@ -190,18 +213,12 @@ export default function ModalInput({ onClose, avatar }) {
                                 </svg>
                             </div>
                         ) : (
-                            "Post"
+                            "Update"
                         )}
-                        {bodyInputValue.length < 8 && titleInputValue.length < 4 && <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Please enter some characters in title and body to create a post</div>}
+                        {~isModified && <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Please enter some characters in title and body to create a post</div>}
                     </button>
                 </div>
             </form>
         </div>
     );
 }
-
-export const privacyOptions = [
-    { title: "Public", icon: "/icons/public-icon.svg" },
-    { title: "Limited", icon: "/icons/limited-icon.svg" },
-    { title: "Private", icon: "/icons/private-icon.svg" },
-];

@@ -1,25 +1,12 @@
 "use client";
 
 import ModalInput from "../mainPart/ModalInput";
-import { fetchImage } from "@/app/lib/actions";
-import { useState, useEffect } from "react";
+import {useState, useContext} from "react";
+import {UserContext} from "@/components/mainLayoutComponents/context/LayoutContext";
 
 export default function AddQuestionButton() {
     const [isShowModal, setIsShowModal] = useState(false);
-    const [avatar, setAvatar] = useState("/icons/avatar-man.svg");
-
-    useEffect(() => {
-        const getImage = async () => {
-            try {
-                const result = await fetchImage();
-                setAvatar(result);
-            } catch (error) {
-                console.error("Failed to fetch image:", error);
-            }
-        };
-
-        getImage();
-    }, []);
+    const avatar = useContext(UserContext);
 
     const showModal = () => {
         setIsShowModal(true);

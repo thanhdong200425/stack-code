@@ -1,22 +1,13 @@
 "use client";
 import Image from "next/image";
 import AvatarPost from "./post/AvatarPost";
-import { useEffect, useState } from "react";
+import {useContext, useEffect, useState} from "react";
 import ModalInput from "./ModalInput";
-import { fetchImage } from "@/app/lib/actions";
+import {UserContext} from "@/components/mainLayoutComponents/context/LayoutContext";
 
 export default function ThoughtInput() {
     const [isShowModal, setIsShowModal] = useState(false);
-    const [avatar, setAvatar] = useState("/icons/avatar-man.svg");
-
-    useEffect(() => {
-        const getImage = async () => {
-            const result = await fetchImage();
-            setAvatar(result);
-        };
-
-        getImage();
-    }, []);
+    const avatar = useContext(UserContext);
 
     const showModal = () => {
         setIsShowModal(true);
