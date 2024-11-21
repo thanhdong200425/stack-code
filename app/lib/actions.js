@@ -8,6 +8,7 @@ import { cookies } from "next/headers";
 import { validate } from "@/app/lib/validateDatabase";
 import supabase from "@/utils/supabase";
 import { insertAndReturnData } from "./utilsDatabase";
+import { endPreviousUserSessions } from "./session";
 
 export async function signUp(prevState, formData) {
     const email = formData.get("email");
@@ -54,6 +55,8 @@ export async function signIn(prevState, formData) {
         if (!compareHashedPassword) {
             return { errors: { error: "Invalid username or password. Please try again" } };
         }
+
+        await endPreviousUserSessions(currentUser.id);
 
         const sessionToken = uuidv4();
         const session = await insertAndReturnData({

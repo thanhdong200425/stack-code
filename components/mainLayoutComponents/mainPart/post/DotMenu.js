@@ -1,9 +1,9 @@
 "use client";
 import { removePost } from "@/app/lib/postActions";
 import Image from "next/image";
-import {useContext, useState} from "react";
+import { useContext, useState } from "react";
 import ModalUpdate from "../ModalUpdate";
-import {UserContext} from "@/components/mainLayoutComponents/context/LayoutContext";
+import { UserContext } from "@/components/mainLayoutComponents/context/LayoutContext";
 
 export default function DotMenu({ postId, authorId, userId }) {
     const [showModal, setShowModal] = useState(false);
@@ -16,8 +16,13 @@ export default function DotMenu({ postId, authorId, userId }) {
 
     const handleCloseModalUpdate = () => {
         setShowModalUpdate(false);
-        if (showModal) setShowModal(false)
-    }
+        if (showModal) setShowModal(false);
+    };
+
+    const deleteEvent = async (postId) => {
+        await removePost(postId);
+        window.location.reload();
+    };
 
     return (
         <div className="flex items-center justify-end relative">
@@ -34,7 +39,7 @@ export default function DotMenu({ postId, authorId, userId }) {
                     )}
 
                     {userId === authorId && (
-                        <button className="flex text-sm items-center text-left w-full p-2 hover:bg-gray-300 rounded-md" onClick={removePost.bind(null, postId)}>
+                        <button className="flex text-sm items-center text-left w-full p-2 hover:bg-gray-300 rounded-md" onClick={deleteEvent.bind(null, postId)}>
                             <Image src={"/icons/delete-icon.svg"} alt="Delete icon" width={20} height={20} className="mr-2" />
                             Delete
                         </button>

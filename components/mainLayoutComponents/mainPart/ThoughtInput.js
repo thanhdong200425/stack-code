@@ -1,9 +1,9 @@
 "use client";
 import Image from "next/image";
 import AvatarPost from "./post/AvatarPost";
-import {useContext, useEffect, useState} from "react";
+import { useContext, useEffect, useState } from "react";
 import ModalInput from "./ModalInput";
-import {UserContext} from "@/components/mainLayoutComponents/context/LayoutContext";
+import { UserContext } from "@/components/mainLayoutComponents/context/LayoutContext";
 
 export default function ThoughtInput() {
     const [isShowModal, setIsShowModal] = useState(false);
@@ -41,7 +41,7 @@ export default function ThoughtInput() {
             {/* Input field */}
             <div className="bg-white p-2 max-w-[45rem] flex items-center rounded-2xl">
                 <AvatarPost src={avatar} alt={"Avatar man"} width={30} height={30} />
-                <input className="w-full mx-5 rounded-2xl bg-gray-50 px-4 py-2 focus:border-none focus:outline-none" placeholder="What do you want to ask or answer?" onClick={showModal} />
+                <input className="w-full mx-5 rounded-2xl bg-gray-50 px-4 py-2 focus:border-none focus:outline-none" placeholder="What do you want to ask or answer?" onClick={showModal} readOnly />
             </div>
             {/* Input buttons */}
             <div className="max-w-[45rem] flex justify-center items-center">

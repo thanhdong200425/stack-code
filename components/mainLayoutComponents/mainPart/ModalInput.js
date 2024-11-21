@@ -24,7 +24,10 @@ export default function ModalInput({ onClose, avatar }) {
     }, []);
 
     useEffect(() => {
-        if (formState?.status === true) onClose();
+        if (formState?.status === true) {
+            onClose();
+            window.location.reload();
+        }
     }, [formState.status, onClose]);
 
     // Function to handle clicks outside the dropdown

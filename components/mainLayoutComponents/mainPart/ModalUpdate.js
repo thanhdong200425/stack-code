@@ -49,7 +49,10 @@ export default function ModalUpdate({ onClose, postId }) {
     }, [titleInputValue, bodyInputValue, uploadedImage]);
 
     useEffect(() => {
-        if (formState?.status === true) onClose();
+        if (formState?.status === true) {
+            onClose();
+            window.location.reload();
+        }
     }, [formState.status, onClose]);
 
     const dropdownRef = useRef(null);
