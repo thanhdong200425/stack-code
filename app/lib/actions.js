@@ -30,7 +30,7 @@ export async function signUp(prevState, formData) {
         return { errors: { server: "There was an error creating your account. Please try again." } };
     }
 
-    redirect("/home");
+    redirect("/sign-in");
 }
 
 export async function signIn(prevState, formData) {
