@@ -1,6 +1,7 @@
 import { fetchData } from "@/app/lib/utilsDatabase";
 import Post from "./Post";
 import { formatDistanceToNow } from "date-fns";
+import supabase from "@/utils/supabase";
 
 export default async function ListPost() {
     const allPosts = await fetchData({
