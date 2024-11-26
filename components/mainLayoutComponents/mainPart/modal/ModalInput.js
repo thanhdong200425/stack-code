@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useEffect, useActionState } from "react";
 import Image from "next/image";
-import AvatarPost from "./post/AvatarPost";
+import AvatarPost from "../post/AvatarPost";
 import { addPost } from "@/app/lib/postActions";
 
 export default function ModalInput({ onClose, avatar }) {

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import AvatarPost from "./post/AvatarPost";
+import AvatarPost from "../post/AvatarPost";
 import { privacyOptions } from "./ModalInput";
 
 import { useState, useRef, useEffect, useActionState, useContext } from "react";

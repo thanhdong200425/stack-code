@@ -2,7 +2,7 @@
 import { removePost } from "@/app/lib/postActions";
 import Image from "next/image";
 import { useContext, useState } from "react";
-import ModalUpdate from "../ModalUpdate";
+import ModalUpdate from "../modal/ModalUpdate";
 import { UserContext } from "@/components/mainLayoutComponents/context/LayoutContext";
 
 export default function DotMenu({ postId, authorId, userId }) {

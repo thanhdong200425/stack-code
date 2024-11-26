@@ -5,8 +5,10 @@ import DotMenu from "./DotMenu";
 import InteractiveButton from "./InteractiveButton";
 import supabase from "@/utils/supabase";
 import { getUserId } from "@/app/lib/utilsDatabase";
+import CommentButton from "./CommentButton";
+import { redirect } from "next/navigation";
 
-export default async function Post({ postId, title, content, authorName, avatarSrc, postImageSrc, timePost, authorId }) {
+export default async function Post({ postId, title, content, authorName, avatarSrc, postImageSrc, timePost, authorId, isHaveRedirect = false }) {
     const data = postImageSrc ? supabase.storage.from("post-image-bucket").getPublicUrl(postImageSrc).data : null;
     const { count: likeQuantity, error: likeError } = await supabase.from("Likes").select("*", { count: "exact", head: true }).eq("post_id", postId);
 
@@ -36,8 +38,7 @@ export default async function Post({ postId, title, content, authorName, avatarS
             {/* Interactive buttons part */}
             <div className="mt-4 flex gap-4">
                 <InteractiveButton src={"/icons/upvote-arrow-v1.svg"} alt={"Upvote arrow"} quantity={likeQuantity} active={isLiked} altSrc={"/icons/upvote-arrow.svg"} postId={postId} userId={currentUserId} />
-                <InteractiveButton src={"/icons/downvote-arrow-v1.svg"} alt={"Downvote arrow"} quantity={"2K"} />
-                <InteractiveButton src={"/icons/comment.svg"} alt={"Comment"} quantity={"500"} />
+                <CommentButton src={"/icons/comment.svg"} alt={"Comment"} currentQuantity={"10"} isHaveRedirect={isHaveRedirect} postId={postId} />
                 <InteractiveButton src={"/icons/share.svg"} alt={"Share"} />
             </div>
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import ModalInput from "../mainPart/ModalInput";
+import ModalInput from "../mainPart/modal/ModalInput";
 import {useState, useContext} from "react";
 import {UserContext} from "@/components/mainLayoutComponents/context/LayoutContext";
 

@@ -2,7 +2,7 @@
 import Image from "next/image";
 import AvatarPost from "./post/AvatarPost";
 import { useContext, useEffect, useState } from "react";
-import ModalInput from "./ModalInput";
+import ModalInput from "./modal/ModalInput";
 import { UserContext } from "@/components/mainLayoutComponents/context/LayoutContext";
 
 export default function ThoughtInput() {
