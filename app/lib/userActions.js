@@ -94,7 +94,7 @@ export async function fetchImage() {
 
     // If there is any error, log them out
     if (error) {
-        throw new Error("Error in fetchImage: " + error);
+        throw new Error("Error in fetchImage: " + error.message);
     }
 
     // If there isn't error, then return avatar
