@@ -1,4 +1,4 @@
-import { fetchData } from "@/app/lib/utilsDatabase";
+import { fetchData } from "@/app/lib/generalActions";
 import Post from "./Post";
 import { formatDistanceToNow } from "date-fns";
 import supabase from "@/utils/supabase";

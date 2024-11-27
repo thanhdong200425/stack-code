@@ -5,10 +5,10 @@ import { v4 as uuidv4 } from "uuid";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
-import { validate } from "@/app/lib/validateDatabase";
+import { validate } from "@/app/lib/validateActions";
 import supabase from "@/utils/supabase";
-import { insertAndReturnData } from "./utilsDatabase";
-import { endPreviousUserSessions } from "./session";
+import { insertAndReturnData } from "./generalActions";
+import { endPreviousUserSessions } from "./sessionActions";
 
 export async function signUp(prevState, formData) {
     const email = formData.get("email");

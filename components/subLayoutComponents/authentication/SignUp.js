@@ -1,7 +1,7 @@
 import FormContainer from "./sub-components/Form";
 import VideoBackground from "./sub-components/VideoBackground";
 import { SignUpButton } from "./sub-components/Form";
-import { signUp } from "@/app/lib/actions";
+import { signUp } from "@/app/lib/userActions";
 
 export default function SignUp() {
     const inputFields = [

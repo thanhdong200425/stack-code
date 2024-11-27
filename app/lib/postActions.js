@@ -1,8 +1,8 @@
 "use server";
 
 import supabase from "@/utils/supabase";
-import { addResourceToStorage, getUserId } from "./utilsDatabase";
-import { getLocalTime } from "./dateTime";
+import { addResourceToStorage, getUserId } from "./generalActions";
+import { getLocalTime } from "./dateTimeActions";
 
 export async function addPost(prevState, formData) {
     const titlePost = formData.get("title");
@@ -107,7 +107,7 @@ export async function updatePost(prevState, formData) {
     // Handle when a new image was updated
     let imagePath = null;
     if (newImage.size > 0) {
-        imagePath = await updateImage(newImage, id);
+        imagePath = await updateImageOfPost(newImage, id);
     }
 
     // Get currentTime
@@ -140,7 +140,7 @@ export async function updatePost(prevState, formData) {
     }
 }
 
-export async function updateImage(newImage, postId) {
+export async function updateImageOfPost(newImage, postId) {
     try {
         // Remove the old image in the storage
         const { data: oldImagePath, error: oldImagePathError } = await supabase.from("Posts").select("image").eq("id", postId).single();

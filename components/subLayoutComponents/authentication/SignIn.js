@@ -1,4 +1,4 @@
-import { signIn } from "@/app/lib/actions";
+import { signIn } from "@/app/lib/userActions";
 import FormContainer, { SignUpButton } from "./sub-components/Form";
 import VideoBackground from "./sub-components/VideoBackground";
 

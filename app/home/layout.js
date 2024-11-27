@@ -1,7 +1,7 @@
 import Header from "@/components/mainLayoutComponents/header/Header";
 import Sidebar from "@/components/mainLayoutComponents/sidebar/Sidebar";
 import LayoutContext, {UserContext} from "@/components/mainLayoutComponents/context/LayoutContext";
-import {fetchImage} from "@/app/lib/actions";
+import {fetchImage} from "@/app/lib/userActions";
 
 export default async function HomeLayout({children}) {
     const userImage = await fetchImage();
