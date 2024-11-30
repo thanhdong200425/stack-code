@@ -1,6 +1,7 @@
+import Link from "next/link";
 import React from "react";
 
-export default function Problem({ title, description, difficulty }) {
+export default function Problem({ id, title, description, difficulty }) {
     return (
         <div className="flex flex-row justify-between items-center w-[95%] border border-gray-300 rounded-lg p-4 mb-4 shadow-md bg-white hover:cursor-pointer hover:bg-gray-100">
             <div className="flex flex-col gap-2">
@@ -12,7 +13,9 @@ export default function Problem({ title, description, difficulty }) {
                 <p className="text-sm text-gray-600">{description}</p>
             </div>
             <div className="flex justify-center">
-                <button className="border-gray-300 border px-4 py-1 rounded-lg hover:bg-blue-600 hover:text-white text-sm">Solve Problem</button>
+                <Link href={`/coding/problem/${id}`} className="border-gray-300 border px-4 py-1 rounded-lg hover:bg-blue-600 hover:text-white text-sm">
+                    Solve Problem
+                </Link>
             </div>
         </div>
     );
