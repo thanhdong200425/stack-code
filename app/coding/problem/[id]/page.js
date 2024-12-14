@@ -1,5 +1,5 @@
 import DetailsProblem from "../../../../components/mainLayoutComponents/coding/DetailsProblem";
-import Editor from "../../../../components/mainLayoutComponents/coding/Editor";
+import CodeEditor from "../../../../components/mainLayoutComponents/coding/Editor";
 
 export default async function Page({ params }) {
     const id = (await params).id;
@@ -9,7 +9,7 @@ export default async function Page({ params }) {
                 <DetailsProblem id={id} />
             </div>
             <div className="basis-1/2">
-                <Editor />
+                <CodeEditor id={id} />
             </div>
         </div>
     );
