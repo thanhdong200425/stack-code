@@ -1,6 +1,6 @@
 "use client";
 
-import supabase from "@/utils/supabase";
+import { createClient as supabaseClient } from "@/utils/supabase/client";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -12,6 +12,7 @@ export default function InteractiveButton({ src, alt, quantity, active, altSrc, 
         setIsCurrentlyLike(!isCurrentlyLike);
 
         if (!isCurrentlyLike) {
+            const supabase = await supabaseClient();
             const { error } = await supabase.from("Likes").insert({
                 post_id: postId,
                 user_id: userId,
@@ -20,6 +21,7 @@ export default function InteractiveButton({ src, alt, quantity, active, altSrc, 
             if (error) console.log("Error when insert a like: " + error);
             else setCurrentQuantity((prevQuantity) => prevQuantity + 1);
         } else {
+            const supabase = await supabaseClient();
             await supabase.from("Likes").delete().match({
                 post_id: postId,
                 user_id: userId,

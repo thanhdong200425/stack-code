@@ -1,7 +1,10 @@
-import supabase from "@/utils/supabase";
+"use server";
+
+import { createClient } from "@/utils/supabase/server";
 
 export async function endPreviousUserSessions(userId) {
     try {
+        const supabase = await createClient();
         await supabase.from("Sessions").delete().eq("userId", userId);
         return {
             status: true,

@@ -7,7 +7,7 @@ import { privacyOptions } from "./ModalInput";
 import { useState, useRef, useEffect, useActionState, useContext } from "react";
 import { updatePost } from "@/app/lib/postActions";
 import { UserContext } from "@/components/mainLayoutComponents/context/LayoutContext";
-import supabase from "@/utils/supabase";
+import { createClient } from "@/utils/supabase/client";
 
 export default function ModalUpdate({ onClose, postId }) {
     const [formState, dispatchFunction, isPending] = useActionState(updatePost, {});
@@ -30,6 +30,7 @@ export default function ModalUpdate({ onClose, postId }) {
 
     useEffect(() => {
         const fetchPost = async () => {
+            const supabase = await createClient();
             try {
                 const { data: post, error } = await supabase.from("Posts").select("*").match({ id: postId }).single();
                 const imageSrc = supabase.storage.from("post-image-bucket").getPublicUrl(post.image);

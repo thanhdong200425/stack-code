@@ -3,12 +3,12 @@ import AvatarPost from "./AvatarPost";
 import Content from "./Content";
 import DotMenu from "./DotMenu";
 import InteractiveButton from "./InteractiveButton";
-import supabase from "@/utils/supabase";
 import { getUserId } from "@/app/lib/generalActions";
 import CommentButton from "./CommentButton";
-import { redirect } from "next/navigation";
+import { createClient } from "@/utils/supabase/server";
 
 export default async function Post({ postId, title, content, authorName, avatarSrc, postImageSrc, timePost, authorId, isHaveRedirect = false }) {
+    const supabase = await createClient();
     const data = postImageSrc ? supabase.storage.from("post-image-bucket").getPublicUrl(postImageSrc).data : null;
     const { count: likeQuantity, error: likeError } = await supabase.from("Likes").select("*", { count: "exact", head: true }).eq("post_id", postId);
     const { count: commentQuantity, error: commentError } = await supabase.from("Comments").select("*", { count: "exact", head: true }).eq("post_id", postId);

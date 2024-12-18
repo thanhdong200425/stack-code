@@ -1,6 +1,6 @@
 "use server";
 
-import supabase from "@/utils/supabase";
+import { createClient } from "@/utils/supabase/server";
 
 export async function addSubmission(language, code, id) {
     // Step 1: Get the language ID
@@ -61,6 +61,7 @@ export async function addSubmission(language, code, id) {
 }
 
 export async function getTestCases(id) {
+    const supabase = await createClient();
     const { data, error } = await supabase.from("Test_Cases").select().eq("problem_id", id);
     if (error) throw new Error(error.message);
 

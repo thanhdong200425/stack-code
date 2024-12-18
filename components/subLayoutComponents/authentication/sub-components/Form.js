@@ -17,7 +17,7 @@ export default function FormContainer({ inputFields = null, children, isHaveLice
             {/* Render input fields */}
             {inputFields &&
                 inputFields.map((field, index) => {
-                    if (field.type === "input") return <InputField key={index} label={field.label} inputName={field.name} />;
+                    if (field.type === "input" || field.type === "email") return <InputField key={index} label={field.label} type={field.type} inputName={field.name} />;
                     else if (field.type === "password") return <PasswordField key={index} name={field.name} />;
                     return null;
                 })}

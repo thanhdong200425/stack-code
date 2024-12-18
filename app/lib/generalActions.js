@@ -1,8 +1,11 @@
-import supabase from "@/utils/supabase";
+"use server";
+
+import { createClient as supabaseServer } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { v4 as uuidv4 } from "uuid";
 
 export async function fetchData({ tableName, columns = [], data = {}, isObject = false }) {
+    const supabase = await supabaseServer();
     const { data: result, error } = isObject
         ? await supabase
               .from(tableName)
@@ -25,6 +28,8 @@ export async function fetchData({ tableName, columns = [], data = {}, isObject =
 export async function insertAndReturnData({ tableName, data = [] }) {
     if (data.length === 0) return null;
     let result, error;
+    const supabase = await supabaseServer();
+
     if (data.length === 1) {
         ({ data: result, error } = await supabase.from(tableName).insert(data[0]).select());
     } else {
@@ -42,16 +47,17 @@ export async function insertAndReturnData({ tableName, data = [] }) {
 export async function getUserId() {
     const cookieStorage = await cookies();
     const sessionId = cookieStorage.get("sessionId").value.trim();
+    const supabase = await supabaseServer();
 
     if (!sessionId) throw new Error("No sessionId");
 
-    const { data: result, error } = await supabase.from("Sessions").select("userId").match({
+    const { data: result, error } = await supabase.from("Sessions").select("user_id").match({
         token: sessionId,
     });
 
-    if (error) throw new Error(error);
+    if (error) throw new Error(error.message);
 
-    return result[0].userId;
+    return result[0].user_id;
 }
 
 export async function addResourceToStorage({ file }) {
@@ -62,12 +68,12 @@ export async function addResourceToStorage({ file }) {
     } catch (error) {
         throw error;
     }
-
+    const supabase = await supabaseServer();
     const { data, error } = await supabase.storage.from("post-image-bucket").upload(userId + "/" + uuidv4(), file);
 
     if (error) {
-        console.log(error);
-        throw error;
+        console.log("Error in addResourceToStorage:", error);
+        throw error.message;
     }
 
     return data.fullPath;

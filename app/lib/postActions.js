@@ -1,8 +1,8 @@
 "use server";
 
-import supabase from "@/utils/supabase";
 import { addResourceToStorage, getUserId } from "./generalActions";
 import { getLocalTime } from "./dateTimeActions";
+import { createClient } from "@/utils/supabase/server";
 
 export async function addPost(prevState, formData) {
     const titlePost = formData.get("title");
@@ -53,6 +53,7 @@ export async function addPost(prevState, formData) {
 
         // Secondly, get the image link and insert a new record with title and body to database
         // Get the author id
+        const supabase = await createClient();
         const { data: newPost, error } = await supabase.from("Posts").insert(dataToUpload);
 
         if (error) throw new Error(error.message);
@@ -78,7 +79,7 @@ export async function removePost(postId) {
                 error: "Post id cannot be null",
             };
         }
-
+        const supabase = await createClient();
         const postImagePath = (await supabase.from("Posts").select("image").match({ id: postId }).single()).data.image;
 
         // Try to remove image in the bucket first
@@ -123,6 +124,7 @@ export async function updatePost(prevState, formData) {
 
     // Update new data
     try {
+        const supabase = await createClient();
         const { error } = await supabase.from("Posts").update(dataToUpdate).eq("id", id);
 
         if (error) {
@@ -143,6 +145,7 @@ export async function updatePost(prevState, formData) {
 export async function updateImageOfPost(newImage, postId) {
     try {
         // Remove the old image in the storage
+        const supabase = await createClient();
         const { data: oldImagePath, error: oldImagePathError } = await supabase.from("Posts").select("image").eq("id", postId).single();
 
         if (oldImagePath.image) {

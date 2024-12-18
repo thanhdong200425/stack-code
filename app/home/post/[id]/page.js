@@ -1,12 +1,13 @@
 import Post from "@/components/mainLayoutComponents/mainPart/post/Post";
-import supabase from "@/utils/supabase";
 import { formatDistanceToNow } from "date-fns";
 import Comment from "@/components/mainLayoutComponents/mainPart/post/Comment";
 import { getUserId } from "@/app/lib/generalActions";
+import { createClient } from "@/utils/supabase/server";
 
 export default async function Page({ params }) {
     const id = (await params).id;
     const currentUserId = await getUserId();
+    const supabase = await createClient();
     const { data: post, error } = await supabase.from("Posts").select("*, Users:author_id ( username, Info_Users (avatar_link) )").eq("id", id).limit(1).single();
     if (error) throw new Error(error);
 

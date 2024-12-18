@@ -5,9 +5,9 @@ import VideoBackground from "./sub-components/VideoBackground";
 export default function SignIn() {
     const inputFields = [
         {
-            type: "input",
-            label: "Username",
-            name: "username",
+            type: "email",
+            label: "Email",
+            name: "email",
         },
         {
             type: "password",

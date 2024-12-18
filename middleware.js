@@ -6,5 +6,12 @@ export default function middleware(request) {
         return authMiddleware(request);
     }
 
+    if (request.nextUrl.pathname.startsWith("/sign-in")) {
+        const sessionId = request.cookies.get("sessionId");
+        if (sessionId) {
+            return NextResponse.redirect(new URL("/home", request.url));
+        }
+    }
+
     return NextResponse.next();
 }

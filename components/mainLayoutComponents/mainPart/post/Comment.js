@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/LayoutContext";
 import { addComment } from "@/app/lib/commentAction";
-import supabase from "@/utils/supabase";
+import { createClient } from "@/utils/supabase/client";
 
 export default function Comment({ comments, postId, userId }) {
     const [newComment, setNewComment] = useState("");
@@ -26,6 +26,7 @@ export default function Comment({ comments, postId, userId }) {
     useEffect(() => {
         const fetchComments = async () => {
             try {
+                const supabase = createClient();
                 const { data: comments, error: commentError } = await supabase.from("Comments").select("*, Users:user_id (username, Info_Users (avatar_link) )").eq("post_id", postId);
 
                 if (commentError) console.log(commentError);

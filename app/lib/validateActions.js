@@ -1,5 +1,3 @@
-import supabase from "@/utils/supabase";
-
 export async function validate(email, password, username) {
     let errors = {};
     // If username is empty

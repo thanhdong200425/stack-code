@@ -1,7 +1,8 @@
-import supabase from "@/utils/supabase";
+import { createClient } from "@/utils/supabase/server";
 import Problem from "./Problem";
 
 export default async function ListProblems() {
+    const supabase = await createClient();
     const { data: problems, error: problemsError } = await supabase.from("Problems").select("id, title, description, difficulty");
 
     if (problemsError) throw new Error("Error in ListProblems component: " + problemsError);
