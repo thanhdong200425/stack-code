@@ -108,6 +108,23 @@ export async function signInWithGoogle() {
     return data.url ? redirect(data.url) : redirect("/sign-in");
 }
 
+export async function signInWithGithub() {
+    const supabase = await createClient();
+    const headerList = await headers();
+    const origin = headerList.get("origin");
+
+    const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "github",
+        options: {
+            redirectTo: `${origin}/auth/callback`,
+        },
+    });
+
+    if (error) throw new Error("Error in signInWithGithub: " + error.message);
+
+    return data.url ? redirect(data.url) : redirect("/sign-in");
+}
+
 export async function fetchImage() {
     const supabase = await createClient();
     const { data: userData } = await supabase.auth.getUser();
