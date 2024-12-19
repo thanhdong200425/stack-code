@@ -8,6 +8,7 @@ import Image from "next/image";
 import InputField from "./Input";
 import Link from "next/link";
 import DividerWithText from "@/components/subLayoutComponents/divider/DividerWithText";
+import { signInWithGoogle } from "@/app/lib/userActions";
 
 export default function FormContainer({ inputFields = null, children, isHaveLicense = true, isSignIn = false, formAction }) {
     const [formState, dispatch, isPending] = useActionState(formAction, {});
@@ -46,10 +47,10 @@ export default function FormContainer({ inputFields = null, children, isHaveLice
     );
 }
 
-export function SignUpButton({ text, iconPath = null, altIconPath = null, widthIcon = null, heightIcon = null, additionClassName = "", isPending }) {
+export function SignUpButton({ text, iconPath = null, altIconPath = null, widthIcon = null, heightIcon = null, additionClassName = "", isPending, onClickWithOAuth = false, onClickFunction }) {
     return (
         <div className="flex justify-center items-center w-full sm:w-[40%]">
-            <button type="submit" className={`w-full max-w-[250px] py-3 px-2 ${iconPath ? "text-zinc-800 border-[1px] border-black hover:bg-[#155bb5] hover:text-white hover:shadow-lg" : "text-white"} ${!iconPath && "bg-gray-300"} rounded-3xl text-sm cursor-pointer mb-6 hover:bg-[#005bb5] hover:text-[#f0f0f0] text-center flex items-center justify-center gap-2 space-x-2 ${additionClassName}`}>
+            <button type={onClickWithOAuth ? "button" : "submit"} onClick={onClickWithOAuth && onClickFunction} className={`w-full max-w-[250px] py-3 px-2 ${iconPath ? "text-zinc-800 border-[1px] border-black hover:bg-[#155bb5] hover:text-white hover:shadow-lg" : "text-white"} ${!iconPath && "bg-gray-300"} rounded-3xl text-sm cursor-pointer mb-6 hover:bg-[#005bb5] hover:text-[#f0f0f0] text-center flex items-center justify-center gap-2 space-x-2 ${additionClassName}`}>
                 {iconPath && <Image src={iconPath} alt={altIconPath} width={widthIcon} height={heightIcon} />}
                 <span>
                     {!isPending ? (

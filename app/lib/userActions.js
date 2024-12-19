@@ -91,6 +91,22 @@ export async function signOut() {
     redirect("/sign-in");
 }
 
+export async function signInWithGoogle() {
+    const supabase = await createClient();
+    const redirectUrl = process.env.NODE_ENV === "development" ? "http://localhost:3000/home" : "https://stack-code-iota.vercel.app/home";
+
+    const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+            redirectTo: redirectUrl,
+        },
+    });
+
+    if (error) throw new Error("Error in signInWithGoogle: " + error.message);
+
+    return data.url ? redirect(data.url) : redirect("/sign-in");
+}
+
 export async function fetchImage() {
     const supabase = await createClient();
     const { data: userData } = await supabase.auth.getUser();
