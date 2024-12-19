@@ -1,17 +1,26 @@
+import { updateSession } from "@/utils/supabase/middleware";
+import { createClient } from "./utils/supabase/server";
 import { NextResponse } from "next/server";
-import authMiddleware from "./middleware/authMiddleware";
 
-export default function middleware(request) {
-    if (request.nextUrl.pathname.startsWith("/home")) {
-        return authMiddleware(request);
+export async function middleware(request) {
+    const protectedPaths = ["/home", "/coding"];
+    const requestPath = request.nextUrl.pathname;
+    const supabase = await createClient();
+
+    if (protectedPaths.some((path) => requestPath.startsWith(path))) {
+        const userSession = await supabase.auth.getSession();
+        if (!userSession.data.session) {
+            return NextResponse.redirect(new URL("/sign-in", request.url));
+        }
     }
 
-    if (request.nextUrl.pathname.startsWith("/sign-in")) {
-        const sessionId = request.cookies.get("sessionId");
-        if (sessionId) {
+    if (requestPath.startsWith("/sign-in") || requestPath.startsWith("/sign-up")) {
+        const userSession = await supabase.auth.getSession();
+        if (userSession.data.session) {
             return NextResponse.redirect(new URL("/home", request.url));
         }
     }
 
-    return NextResponse.next();
+    // update user's auth session
+    return await updateSession(request);
 }

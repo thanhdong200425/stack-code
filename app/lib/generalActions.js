@@ -45,19 +45,10 @@ export async function insertAndReturnData({ tableName, data = [] }) {
 }
 
 export async function getUserId() {
-    const cookieStorage = await cookies();
-    const sessionId = cookieStorage.get("sessionId").value.trim();
     const supabase = await supabaseServer();
+    const { data } = await supabase.auth.getUser();
 
-    if (!sessionId) throw new Error("No sessionId");
-
-    const { data: result, error } = await supabase.from("Sessions").select("user_id").match({
-        token: sessionId,
-    });
-
-    if (error) throw new Error(error.message);
-
-    return result[0].user_id;
+    return data.user.id ? data.user.id : null;
 }
 
 export async function addResourceToStorage({ file }) {

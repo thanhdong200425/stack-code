@@ -82,15 +82,21 @@ export async function signIn(prevState, formData) {
     redirect("/home");
 }
 
-export async function fetchImage() {
+export async function signOut() {
     const supabase = await createClient();
 
-    // Get sessionId from cookie first
-    const cookieStore = await cookies();
-    const sessionId = cookieStore.get("sessionId").value;
+    const { error } = await supabase.auth.signOut();
+
+    if (error) throw new Error("Error in signOut: " + error.message);
+    redirect("/sign-in");
+}
+
+export async function fetchImage() {
+    const supabase = await createClient();
+    const { data: userData } = await supabase.auth.getUser();
 
     // Get image by retrieve userId from sessionId
-    const { data, error } = await supabase.from("Sessions").select("Users:user_id (Info_Users (avatar_link))").match({ token: sessionId }).single();
+    const { data, error } = await supabase.from("Info_Users").select("avatar_link").eq("id", userData.user.id).single();
 
     // If there is any error, log them out
     if (error) {
@@ -98,5 +104,5 @@ export async function fetchImage() {
     }
 
     // If there isn't error, then return avatar
-    return data.Users.Info_Users.avatar_link;
+    return data.avatar_link;
 }
