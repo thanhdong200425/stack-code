@@ -2,7 +2,7 @@
 
 import { v4 as uuidv4 } from "uuid";
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { insertAndReturnData } from "./generalActions";
 import { endPreviousUserSessions } from "./sessionActions";
 import { createClient } from "@/utils/supabase/server";
@@ -93,12 +93,13 @@ export async function signOut() {
 
 export async function signInWithGoogle() {
     const supabase = await createClient();
-    const redirectUrl = process.env.NODE_ENV === "development" ? "http://localhost:3000/home" : "https://stack-code-iota.vercel.app/home";
+    const headerList = await headers();
+    const origin = headerList.get("origin");
 
     const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-            redirectTo: redirectUrl,
+            redirectTo: `${origin}/auth/callback`,
         },
     });
 
