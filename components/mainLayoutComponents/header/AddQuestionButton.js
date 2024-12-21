@@ -18,8 +18,11 @@ export default function AddQuestionButton() {
 
     return (
         <>
-            {isShowModal && <ModalInput onClose={hideModal} avatar={avatar} />}
-            <button className="px-4 py-2 rounded-xl text-white bg-blue-400 hover:bg-blue-600" onClick={showModal}>
+            {isShowModal && <ModalInput onClose={hideModal} avatar={avatar}/>}
+            <button
+                className="px-4 py-2 rounded-xl text-white bg-blue-400 hover:bg-blue-600 sm:text-sm sm:px-4 sm:py-1"
+                onClick={showModal}
+            >
                 Add question
             </button>
         </>

@@ -125,6 +125,22 @@ export async function signInWithGithub() {
     return data.url ? redirect(data.url) : redirect("/sign-in");
 }
 
+export async function signInWithNotion() {
+    const supabase = await createClient();
+    const headerList = await headers();
+    const origin = headerList.get('origin');
+    const {data, error} = await supabase.auth.signInWithOAuth({
+        provider: "notion",
+        options: {
+            redirectTo: `${origin}/auth/callback`,
+        }
+    })
+
+    if (error) throw new Error("Error in signInWithNotion: " + error.message);
+
+    return data.url ? redirect(data.url) : redirect("/sign-in");
+}
+
 export async function fetchImage() {
     const supabase = await createClient();
     const { data: userData } = await supabase.auth.getUser();
