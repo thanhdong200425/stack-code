@@ -21,8 +21,8 @@ export default function Avatar({ src }) {
 
     return (
         <div className="px-3 relative flex" ref={menuRef}>
-            <button onClick={() => setIsOpen(!isOpen)} className="rounded-xl hover:ring-2 hover:ring-gray-200 transition-all duration-200">
-                <Image className="rounded-xl object-cover w-[100%] h-[100%]" src={src} alt={"Avatar image"} width={30} height={30} />
+            <button onClick={() => setIsOpen(!isOpen)} className="rounded-full hover:ring-2 hover:ring-gray-200 transition-all duration-200">
+                <Image className="rounded-full object-cover w-10 h-10" src={src} alt={"Avatar image"} width={40} height={40} style={{ width: "40px", height: "40px" }} />
             </button>
 
             {/* Floating Menu */}
