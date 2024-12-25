@@ -128,9 +128,11 @@ export async function updatePost(prevState, formData) {
         const { error } = await supabase.from("Posts").update(dataToUpdate).eq("id", id);
 
         if (error) {
-            errors: {
-                error;
-            }
+            return {
+                errors: {
+                    error,
+                },
+            };
         }
 
         return {

@@ -20,14 +20,14 @@ export default function Avatar({ src }) {
     }, []);
 
     return (
-        <div className="px-3 relative" ref={menuRef}>
+        <div className="px-3 relative flex" ref={menuRef}>
             <button onClick={() => setIsOpen(!isOpen)} className="rounded-xl hover:ring-2 hover:ring-gray-200 transition-all duration-200">
                 <Image className="rounded-xl object-cover w-[100%] h-[100%]" src={src} alt={"Avatar image"} width={30} height={30} />
             </button>
 
             {/* Floating Menu */}
             {isOpen && (
-                <div className="absolute right-0 mt-2 w-32 bg-white rounded-md shadow-lg py-1 border border-gray-200">
+                <div className="absolute top-8 left-2 mt-2 w-32 bg-white rounded-md shadow-lg py-1 border border-gray-200">
                     <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                         Edit Profile
                     </Link>

@@ -25,7 +25,6 @@ export default function Header() {
                     <IconContainer>
                         <HeaderIcon src={"/icons/home.svg"} alt={"Home icon"} href={"home"} />
                         <HeaderIcon src={"/icons/coding-icon.svg"} alt={"Coding icon"} href={"coding"} />
-                        <HeaderIcon src={"/icons/notify-icon.svg"} alt={"Notify icon"} />
                     </IconContainer>
 
                     {/*Header search bar part*/}
