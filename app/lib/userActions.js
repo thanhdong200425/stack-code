@@ -3,9 +3,10 @@
 import { v4 as uuidv4 } from "uuid";
 import { redirect } from "next/navigation";
 import { cookies, headers } from "next/headers";
-import { insertAndReturnData } from "./generalActions";
+import { addResourceToStorage, insertAndReturnData } from "./generalActions";
 import { endPreviousUserSessions } from "./sessionActions";
 import { createClient } from "@/utils/supabase/server";
+import { revalidatePath } from "next/cache";
 
 export async function signUpFunction(prevState, formData) {
     const supabase = await createClient();
@@ -128,13 +129,13 @@ export async function signInWithGithub() {
 export async function signInWithNotion() {
     const supabase = await createClient();
     const headerList = await headers();
-    const origin = headerList.get('origin');
-    const {data, error} = await supabase.auth.signInWithOAuth({
+    const origin = headerList.get("origin");
+    const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "notion",
         options: {
             redirectTo: `${origin}/auth/callback`,
-        }
-    })
+        },
+    });
 
     if (error) throw new Error("Error in signInWithNotion: " + error.message);
 
@@ -155,4 +156,77 @@ export async function fetchImage() {
 
     // If there isn't error, then return avatar
     return data.avatar_link;
+}
+
+export async function getCurrentUserInformation() {
+    const supabase = await createClient();
+    const { data: userData } = await supabase.auth.getUser();
+
+    // Get image by retrieve userId
+    const { data: infoData, error } = await supabase.from("Info_Users").select("*, Users(username) ").eq("id", userData.user.id).single();
+
+    if (error) throw new Error("Error in getCurrentUserInformation: " + error.message);
+
+    return { email: userData.user.email, ...infoData };
+}
+
+export async function updateUserInfo(prevState, formData) {
+    const supabase = await createClient();
+    const { data: currentUser } = await supabase.auth.getUser();
+
+    const username = formData.get("username") || null;
+    const phone_number = formData.get("phone_number") || null;
+    const github_link = formData.get("github_link") || null;
+    const facebook_link = formData.get("facebook_link") || null;
+    const google_link = formData.get("google_link") || null;
+    const avatar_image = formData.get("avatar_image") || null;
+    let upload_path;
+    if (avatar_image.size > 0) {
+        upload_path = await addResourceToStorage({
+            file: avatar_image,
+            storageName: "avatar_bucket",
+        });
+
+        upload_path = upload_path.split("/").slice(1).join("/");
+    }
+
+    const { data: avatarPath } = supabase.storage.from("avatar_bucket").getPublicUrl(upload_path);
+
+    const updates = {
+        phone_number,
+        facebook_link,
+        google_link,
+        github_link,
+        avatar_link: avatarPath.publicUrl,
+    };
+
+    if (username) {
+        const { error } = await supabase
+            .from("Users")
+            .update({
+                username,
+            })
+            .eq("id", currentUser.user.id);
+        if (error) {
+            console.error("Error in updateUserInfo: " + error);
+            return {
+                errors: {
+                    error,
+                },
+            };
+        }
+    }
+
+    const { error } = await supabase.from("Info_Users").update(updates).eq("id", currentUser.user.id);
+
+    if (error) {
+        console.error("Error in updateUserInfo: " + error);
+        return {
+            errors: {
+                error,
+            },
+        };
+    }
+
+    redirect("/profile");
 }

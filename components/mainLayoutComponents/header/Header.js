@@ -29,7 +29,7 @@ export default function Header() {
                     </IconContainer>
 
                     {/*Header search bar part*/}
-                    <SearchBar name="search-bar" placeholder="Search Stackcode" setIsFocused={setIsFocused} />
+                    <SearchBar name="search-bar" placeholder="Find people or coding problems..." isFocused={isFocused} setIsFocused={setIsFocused} />
 
                     {/*Avatar part*/}
                     <Avatar src={avatar} />

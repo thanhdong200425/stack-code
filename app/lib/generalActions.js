@@ -51,7 +51,7 @@ export async function getUserId() {
     return data.user.id ? data.user.id : null;
 }
 
-export async function addResourceToStorage({ file }) {
+export async function addResourceToStorage({ file, storageName = "post-image-bucket" }) {
     let userId;
 
     try {
@@ -60,7 +60,7 @@ export async function addResourceToStorage({ file }) {
         throw error;
     }
     const supabase = await supabaseServer();
-    const { data, error } = await supabase.storage.from("post-image-bucket").upload(userId + "/" + uuidv4(), file);
+    const { data, error } = await supabase.storage.from(storageName).upload(userId + "/" + uuidv4(), file);
 
     if (error) {
         console.log("Error in addResourceToStorage:", error);

@@ -3,11 +3,11 @@ import Introduction from "@/components/subLayoutComponents/main-part/introductio
 import Slogan from "@/components/subLayoutComponents/main-part/introduction-part/Slogan";
 
 export default function HomePage() {
-    return (
-        <>
-            <Header />
-            <Introduction />
-            <Slogan />
-        </>
-    );
+  return (
+    <>
+      <Header />
+      <Introduction />
+      <Slogan />
+    </>
+  );
 }

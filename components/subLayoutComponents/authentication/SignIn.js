@@ -1,4 +1,4 @@
-import {signIn, signInWithGithub, signInWithGoogle, signInWithNotion} from "@/app/lib/userActions";
+import { signIn, signInWithGithub, signInWithGoogle, signInWithNotion } from "@/app/lib/userActions";
 import FormContainer, { SignUpButton } from "./sub-components/Form";
 import VideoBackground from "./sub-components/VideoBackground";
 
@@ -20,7 +20,7 @@ export default function SignIn() {
             <div className="flex flex-1">
                 <div className="flex flex-1 justify-center items-center flex-col">
                     <h1 className="font-mono text-center font-bold text-3xl uppercase text-blue-500">Welcome back</h1>
-                    <FormContainer inputFields={inputFields} formAction={signIn} isHaveLicense={false} isSignIn={true}>
+                    <FormContainer inputFields={inputFields} formAction={signIn} isHaveLicense={true} isSignIn={true}>
                         <SignUpButton text={"Sign in with Notion"} iconPath={"/icons/notion.svg"} altIconPath={"Notion icon"} widthIcon={30} heightIcon={30} onClickWithOAuth={true} onClickFunction={signInWithNotion} />
                         <SignUpButton text={"Sign in with Google"} iconPath={"/icons/google.svg"} altIconPath={"Google icon"} widthIcon={30} heightIcon={30} onClickWithOAuth={true} onClickFunction={signInWithGoogle} />
                         <SignUpButton text={"Sign in with Github"} iconPath={"/icons/github.svg"} altIconPath={"Github icon"} widthIcon={30} heightIcon={30} onClickWithOAuth={true} onClickFunction={signInWithGithub} />
