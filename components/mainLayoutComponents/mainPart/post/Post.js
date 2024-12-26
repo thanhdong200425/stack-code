@@ -22,25 +22,39 @@ export default async function Post({ postId, title, content, authorName, avatarS
     const isLiked = userLikeData.length > 0;
 
     return (
-        // Container
-        <div className="border rounded-2xl p-2 my-5">
-            {/* Avatar and name container */}
-            <div className="flex items-center justify-between w-full">
-                <div className="flex items-center justify-start gap-2">
-                    <AvatarPost src={avatarSrc} alt={authorName + " avatar"} width={30} height={30} />
+        <div className="bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-6 my-6 shadow-lg hover:shadow-xl transition-all duration-300">
+            <div className="flex items-center justify-between w-full mb-4">
+                <div className="flex items-center justify-start gap-3 hover:transform hover:translate-x-1 transition-transform duration-200">
+                    <AvatarPost src={avatarSrc} alt={authorName + " avatar"} width={40} height={40} />
                     <AvatarInfo name={authorName} datePost={timePost ? timePost : "..."} />
                 </div>
                 <DotMenu postId={postId} authorId={authorId} userId={currentUserId} />
             </div>
 
-            {/* Main content part */}
-            <Content heading={title} content={content} imageSrc={data ? data.publicUrl : null} imageAlt={"Lorem piscum"} imageWidth={1000} imageHeight={100} />
+            <div className="px-2">
+                <Content heading={title} content={content} imageSrc={data ? data.publicUrl : null} imageAlt={"Post image"} imageWidth={1000} imageHeight={100} />
+            </div>
 
-            {/* Interactive buttons part */}
-            <div className="mt-4 flex gap-4">
-                <InteractiveButton src={"/icons/upvote-arrow-v1.svg"} alt={"Upvote arrow"} quantity={likeQuantity} active={isLiked} altSrc={"/icons/upvote-arrow.svg"} postId={postId} userId={currentUserId} />
-                <CommentButton src={"/icons/comment.svg"} alt={"Comment"} currentQuantity={commentQuantity} isHaveRedirect={isHaveRedirect} postId={postId} />
-                <InteractiveButton src={"/icons/share.svg"} alt={"Share"} />
+            <div className="mt-6 flex gap-6 border-t border-gray-100 pt-4">
+                <InteractiveButton
+                    src={"/icons/upvote-arrow-v1.svg"}
+                    alt={"Upvote arrow"}
+                    quantity={likeQuantity}
+                    active={isLiked}
+                    altSrc={"/icons/upvote-arrow.svg"}
+                    postId={postId}
+                    userId={currentUserId}
+                    className="hover:scale-110 transition-transform duration-200"
+                />
+                <CommentButton
+                    src={"/icons/comment.svg"}
+                    alt={"Comment"}
+                    currentQuantity={commentQuantity}
+                    isHaveRedirect={isHaveRedirect}
+                    postId={postId}
+                    className="hover:scale-110 transition-transform duration-200"
+                />
+                <InteractiveButton src={"/icons/share.svg"} alt={"Share"} className="hover:scale-110 transition-transform duration-200" />
             </div>
         </div>
     );

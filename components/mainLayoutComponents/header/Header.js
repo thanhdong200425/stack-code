@@ -8,10 +8,12 @@ import { useContext, useState } from "react";
 import Avatar from "@/components/mainLayoutComponents/header/Avatar";
 import AddQuestionButton from "@/components/mainLayoutComponents/header/AddQuestionButton";
 import { UserContext } from "@/components/mainLayoutComponents/context/LayoutContext";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
     const [isFocused, setIsFocused] = useState(false);
     const avatar = useContext(UserContext);
+    const router = useRouter();
 
     return (
         <header className="bg-white border-b shadow-md fixed w-full z-50 mb-5">
@@ -23,8 +25,9 @@ export default function Header() {
 
                     {/*Header icon part*/}
                     <IconContainer>
-                        <HeaderIcon src={"/icons/home.svg"} alt={"Home icon"} href={"home"} />
-                        <HeaderIcon src={"/icons/coding-icon.svg"} alt={"Coding icon"} href={"coding"} />
+                        <HeaderIcon src={"/icons/home.svg"} alt={"Home icon"} onClick={() => router.push("/home")} />
+                        <HeaderIcon src={"/icons/coding-icon.svg"} alt={"Coding icon"} onClick={() => router.push("/coding")} />
+                        <HeaderIcon src={"/icons/profile-icon.svg"} alt={"Profile icon"} onClick={() => router.push("/profile")} />
                     </IconContainer>
 
                     {/*Header search bar part*/}

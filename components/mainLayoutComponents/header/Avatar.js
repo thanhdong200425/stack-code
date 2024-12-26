@@ -28,7 +28,7 @@ export default function Avatar({ src }) {
             {/* Floating Menu */}
             {isOpen && (
                 <div className="absolute top-8 left-2 mt-2 w-32 bg-white rounded-md shadow-lg py-1 border border-gray-200">
-                    <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    <Link href="/edit-profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                         Edit Profile
                     </Link>
                     <div className="border-t border-gray-200"></div>

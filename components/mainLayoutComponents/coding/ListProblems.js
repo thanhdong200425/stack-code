@@ -9,7 +9,7 @@ export default async function ListProblems() {
 
     return (
         <div className="">
-            <h1 className="text-xl font-bold mb-6">Problem Solving</h1>
+            <h1 className="text-xl font-bold mb-6 ml-1">Problem Solving</h1>
             {problems.map((problem) => (
                 <Problem key={problem.id} id={problem.id} title={problem.title} description={problem.description} difficulty={problem.difficulty} />
             ))}

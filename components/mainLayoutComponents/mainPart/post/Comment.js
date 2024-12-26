@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/LayoutContext";
 import { addComment } from "@/app/lib/commentAction";
 import { createClient } from "@/utils/supabase/client";
+import { formatDistanceToNow } from "date-fns";
 
 export default function Comment({ comments, postId, userId }) {
     const [newComment, setNewComment] = useState("");
@@ -28,7 +29,6 @@ export default function Comment({ comments, postId, userId }) {
             try {
                 const supabase = createClient();
                 const { data: comments, error: commentError } = await supabase.from("Comments").select("*, Users:user_id (username, Info_Users (avatar_link) )").eq("post_id", postId);
-
                 if (commentError) console.log(commentError);
                 else setCurrentComments(comments);
             } catch (error) {
@@ -41,29 +41,38 @@ export default function Comment({ comments, postId, userId }) {
 
     return (
         <div className="space-y-4">
-            {currentComments.map((comment) => (
-                <div key={comment.id} className="flex items-start space-x-4 p-4 border-b border-gray-200">
-                    <Image src={comment.Users.Info_Users.avatar_link} alt="User Avatar" width={30} height={30} className="rounded-full" />
-                    <div className="flex flex-col">
-                        <p className="font-semibold">{comment.Users.username}</p>
-                        <p className="text-gray-700">{comment.content}</p>
-                        {comment.image && (
-                            <div className="mt-2">
-                                <Image src={comment.image} alt="Comment Image" width={200} height={200} className="rounded-lg" />
+            {currentComments.map((comment) => {
+                const time = formatDistanceToNow(comment.created_at, { addSuffix: true });
+                return (
+                    <div key={comment.id} className="flex items-start space-x-4 p-4 border-b border-gray-200">
+                        <Image src={comment.Users.Info_Users.avatar_link} alt="User Avatar" width={30} height={30} className="rounded-full" />
+                        <div className="flex flex-col">
+                            <p className="font-semibold">{comment.Users.username}</p>
+                            <p className="text-gray-700">{comment.content}</p>
+                            {comment.image && (
+                                <div className="mt-2">
+                                    <Image src={comment.image} alt="Comment Image" width={200} height={200} className="rounded-lg" />
+                                </div>
+                            )}
+                            <div className="flex items-center text-gray-500 text-base mt-4">
+                                <span>{time}</span>
+                                <button className="ml-4">
+                                    <Image src={"/icons/reply-icon.svg"} alt="Reply icon" width={22} height={22} />
+                                </button>
                             </div>
-                        )}
-                        <div className="flex items-center text-gray-500 text-base mt-4">
-                            <span>3 hours ago</span>
-                            <button className="ml-4">
-                                <Image src={"/icons/reply-icon.svg"} alt="Reply icon" width={22} height={22} />
-                            </button>
                         </div>
                     </div>
-                </div>
-            ))}
+                );
+            })}
             <div className="flex items-center space-x-4 pb-4 mb-4 border-gray-200">
                 <Image src={currentUserImage} alt="User Avatar" width={30} height={30} className="rounded-full" />
-                <input type="text" value={newComment} onChange={handleCommentChange} placeholder="Add a comment..." className="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <input
+                    type="text"
+                    value={newComment}
+                    onChange={handleCommentChange}
+                    placeholder="Add a comment..."
+                    className="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
                 <button onClick={handleCommentSubmit.bind(this, postId, userId, newComment)} className="text-blue-500 hover:underline">
                     {isAddingComment ? (
                         <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
