@@ -1,25 +1,31 @@
 .container {
     position: fixed;
-    top: 0;
+    top: 64px; /* Add top offset equal to header height */
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: calc(100vh - 64px); /* Subtract header height */
     overflow: hidden;
     z-index: -999;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
 }
 
 .square {
     position: absolute;
-    background-color: orange;
+    background: linear-gradient(45deg, rgba(25, 118, 210, 0.2), rgba(33, 150, 243, 0.3));
     animation: moveSquares linear infinite;
-    border-radius: 5px;
+    border-radius: 15px;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 8px 32px rgba(255, 165, 0, 0.1);
 }
 
 @keyframes moveSquares {
     0% {
-        transform: translateY(0) rotate(0deg);
+        transform: translateY(0) rotate(0deg) scale(1);
+    }
+    50% {
+        transform: translateY(-100vh) rotate(180deg) scale(1.2);
     }
     100% {
-        transform: translateY(-200vh) rotate(360deg);
+        transform: translateY(-200vh) rotate(360deg) scale(1);
     }
 }

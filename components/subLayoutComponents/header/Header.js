@@ -5,31 +5,29 @@ import Link from "next/link";
 
 export default function Header() {
     return (
-        <div className={classes.headerBlock}>
-            {/*Left header*/}
+        <header className={classes.headerBlock}>
             <div className={classes.headerBlockLeft}>
                 <Logo url={icon2} />
-                <div className={classes.navigation}>
+                <nav className={classes.navigation}>
                     <ul>
-                        <a href="#">
-                            <li>About</li>
-                        </a>
-                        <a href="#">
-                            <li>Practice</li>
-                        </a>
-                        <a href="#">
-                            <li>Ask</li>
-                        </a>
+                        <li>
+                            <Link href="/about">About</Link>
+                        </li>
+                        <li>
+                            <Link href="/coding">Practice</Link>
+                        </li>
+                        <li>
+                            <Link href="/home">Ask</Link>
+                        </li>
                     </ul>
-                </div>
+                </nav>
             </div>
 
-            {/*Right header*/}
             <div className={classes.headerBlockRight}>
                 <ul>
-                    <a href="#">
-                        <li>Follow us</li>
-                    </a>
+                    <li>
+                        <Link href="/follow">Follow us</Link>
+                    </li>
                     <li>
                         <Link href="/sign-in" className={classes.signInButton}>
                             Sign in
@@ -37,6 +35,6 @@ export default function Header() {
                     </li>
                 </ul>
             </div>
-        </div>
+        </header>
     );
 }

@@ -1,11 +1,18 @@
 .headerBlock {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px; /* Increased height */
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
-    width: 85vw;
-    margin: 0 auto;
-    padding: 1.5rem 0;
-    max-height: 5rem;
+    align-items: center;
+    padding: 0 3rem; /* Increased padding */
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    z-index: 1000;
+    border-bottom: 1px solid rgba(25, 118, 210, 0.1);
 }
 
 .headerBlock ul {
@@ -16,8 +23,8 @@
 
 .headerBlockLeft {
     display: flex;
-    flex: 1;
-    position: relative;
+    align-items: center;
+    gap: 2rem;
 }
 
 .navigation {
@@ -26,20 +33,52 @@
 
 .navigation ul {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    gap: 2rem;
+    list-style: none;
 }
 
-.navigation ul li,
+.navigation ul li {
+    padding: 0.5rem 1.5rem;
+}
+
 .headerBlockRight ul li {
-    padding: 0.3rem 1.4rem;
-    border-radius: 10px;
+    padding: 0.5rem 0;
+    border-radius: 8px;
+    position: relative;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.3px;
 }
 
-.navigation ul li:hover,
-.headerBlockRight ul a li:hover {
-    background-color: #000000; /* Light Green */
-    color: #ffffff;
+.navigation li {
+    font-weight: 500;
+    font-size: 1rem;
+    color: #333;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.navigation li::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #1976d2, #2196f3);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.navigation li:hover::after {
+    width: 80%;
+}
+
+.navigation li:hover {
+    background: rgba(25, 118, 210, 0.05);
+    color: #1976d2;
+    transform: translateY(-1px);
 }
 
 /*Right header*/
@@ -51,19 +90,85 @@
 
 .headerBlockRight ul {
     display: flex;
-    justify-content: center;
     align-items: center;
+    gap: 2rem;
+    list-style: none;
+    padding-right: 1rem; /* Add some padding from the right edge */
+}
+
+.headerBlockRight li {
+    font-weight: 500;
+    color: #333;
+}
+
+.headerBlockRight a:not(.signInButton) {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #1976d2;
+    background: rgba(25, 118, 210, 0.1);
+    transition: all 0.3s ease;
+    position: relative; /* Add position relative for potential separator */
+}
+
+.headerBlockRight a:not(.signInButton):hover {
+    background: rgba(25, 118, 210, 0.15);
+    transform: translateY(-1px);
+}
+
+/* Remove the separator since we have a new design */
+.headerBlockRight a:not(.signInButton)::after {
+    display: none;
 }
 
 /*Sign in button*/
 .signInButton {
-    background-color: rgb(186, 91, 56);
-    color: #fff;
-    padding: 0.5rem 1.4rem;
-    border-radius: 8px;
+    padding: 0.6rem 1.8rem !important;
+    background: linear-gradient(45deg, #1976d2, #2196f3) !important;
+    color: white !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    letter-spacing: 0.3px;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
+    border: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.signInButton::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
 }
 
 .signInButton:hover {
-    background-color: rgb(216, 121, 86);
-    cursor: pointer;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 15px rgba(25, 118, 210, 0.4) !important;
+}
+
+.signInButton:hover::before {
+    left: 100%;
+}
+
+@media (max-width: 768px) {
+    .headerBlock {
+        padding: 0 1.5rem;
+        height: 60px;
+    }
+
+    .navigation {
+        display: none;
+    }
+
+    .headerBlockRight ul {
+        gap: 1rem;
+    }
 }
